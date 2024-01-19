@@ -1,0 +1,113 @@
+.r-ViewBar {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0px;
+  align-items: center;
+}
+.r-ViewBar2 {
+  /* background-color: black; */
+  display: flex;
+  width: 45%;
+  justify-content: space-between;
+  align-items: center;
+}
+.rolesSearch {
+  width: 100%;
+  padding: 2px 13px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  transition: 0.5s;
+  border-radius: 5px;
+  width: 300px;
+  outline: none;
+}
+.rolesSearch:focus {
+  border: 1px solid lightgray;
+  background-color: white;
+}
+.r-View-btn {
+  display: flex;
+}
+.main_content_container {
+  max-height: 66vh;
+  overflow-y: auto;
+}
+.tableContainer {
+  position: relative;
+}
+.roleViewTable {
+  margin: 0px auto;
+  width: 100%;
+  table-layout: auto;
+  width: auto;
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 20px;
+  margin-right: 25px;
+}
+tbody {
+  /* background-color: antiquewhite;
+  height: 46px;
+  overflow-y: auto; */
+}
+.roleViewTable thead th {
+  background-color: whitesmoke;
+  padding: 13px 2px;
+  font-size: 14px;
+  color: rgb(90, 89, 89);
+  position: sticky;
+  top: 0px;
+  z-index: 1;
+}
+
+.roleViewTable th,
+tr {
+  padding-left: 14px;
+  padding-right: 14px;
+}
+.roleViewTable tr td {
+  padding: 5px 5px;
+  color: gray;
+  font-size: 11px;
+  font-weight: normal;
+  text-align: center;
+}
+
+.rolesSearch {
+  width: 100%;
+  padding: 10px 13px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  transition: 0.5s;
+  border-radius: 5px;
+  width: 300px;
+  outline: none;
+}
+.rolesSearch:focus {
+  border: 1px solid lightgray;
+  background-color: white;
+}
+.Actionbtn {
+  border-radius: 100%;
+  padding: 5px 5px;
+  margin: 3px 4px;
+  color: white;
+  border: none;
+  height: 28px;
+  width: 28px;
+}
+.Actionbtn:hover {
+  cursor: pointer;
+}
+.delBtn {
+  background-color: #df2f35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.editBtn {
+  display: flex;
+  background-color: var(--primary-color);
+  align-items: center;
+  justify-content: center;
+}

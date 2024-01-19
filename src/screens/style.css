@@ -1,0 +1,54 @@
+.mainDashView {
+  width: 100vw;
+  padding-bottom: 25px;
+  max-height: 100vh;
+  overflow: hidden;
+}
+.dashPanel {
+  background-color: white;
+  padding: 4% 2%;
+  border-radius: 8px;
+  margin: 20px;
+  height: 80vh;
+  max-height: 80vh;
+  box-shadow: 0 0 15px 3px #eae9e9;
+}
+.mainDashPanel {
+  display: flex;
+  justify-content: space-between;
+}
+.mainContent {
+  /* background-color: #F5F5F5; */
+  flex-grow: 1;
+  margin-right: 10px;
+  /* padding: 7px; */
+}
+.md_graph {
+  /* border: 1px solid lightgray; */
+  height: 10vh;
+  padding: 2px;
+  border-radius: 13px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: x-large;
+  font-weight: 500;
+  background-color: white;
+}
+.mainContent {
+}
+.welcome_text {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.1rem;
+  margin: 5px 0px;
+}
+.owner_text {
+  font-size: 0.9rem;
+}
+@media (max-width: 1250px) {
+  .mainDashView {
+    /* width: 85vw; */
+  }
+}
