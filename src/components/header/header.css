@@ -73,6 +73,7 @@
 }
 .dropdown-content-show {
   cursor: pointer;
+  z-index: 20;
   overflow: hidden;
   max-height: 70px;
   position: absolute;

@@ -51,31 +51,35 @@ export default function FaqAddEdit({ isEdit }) {
   };
 
   const saveOnclick = () => {
-    setErr(false);
-    setIsLoading(true);
-    postFaq(newData)
-      .then(({ data }) => {
-        setIsLoading(false);
-        if (
-          data.error_code == ErrorCode.success ||
-          data.error_code == ErrorCode.updated
-        ) {
-          navigate("/dashboard/faq", {
-            state: { page: page },
-          });
-        } else if (data.error_code == ErrorCode.failed) {
+    if (!newData.question) setQuestionErr(true);
+    else if (!newData.answer) setansErr(true);
+    else {
+      setErr(false);
+      setIsLoading(true);
+      postFaq(newData)
+        .then(({ data }) => {
+          setIsLoading(false);
+          if (
+            data.error_code == ErrorCode.success ||
+            data.error_code == ErrorCode.updated
+          ) {
+            navigate("/dashboard/faq", {
+              state: { page: page },
+            });
+          } else if (data.error_code == ErrorCode.failed) {
+            setErr(true);
+            setErrMsg(ErrorMessages.failed);
+          } else {
+            setErr(true);
+            setErrMsg("Oops some error occured. EC:" + data.error_code);
+          }
+        })
+        .catch((err) => {
+          setIsLoading(false);
           setErr(true);
-          setErrMsg(ErrorMessages.failed);
-        } else {
-          setErr(true);
-          setErrMsg("Oops some error occured. EC:" + data.error_code);
-        }
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        setErr(true);
-        setErrMsg(ErrorMessages.network_error);
-      });
+          setErrMsg(ErrorMessages.network_error);
+        });
+    }
   };
 
   return (

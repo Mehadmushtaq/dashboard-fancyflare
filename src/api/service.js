@@ -6,3 +6,13 @@ export const getServiceCards = (is_main) => {
   const api = apiInstance();
   return api.get("api/service/get-all", { params });
 };
+
+export const postServiceCard = (data) => {
+  const api = apiInstance();
+  return api.post("api/service/post", data);
+};
+
+export const deleteServiceCard = (data) => {
+  const api = apiInstance();
+  return api.post("api/service/delete", data);
+};

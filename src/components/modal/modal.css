@@ -80,6 +80,7 @@
 }
 .delete_btn:hover {
   cursor: pointer;
+  color: red;
   border: 1px solid red;
 }
 .del_cross_icon {

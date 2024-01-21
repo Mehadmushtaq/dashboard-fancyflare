@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import "./review.css";
 import Pagination from "react-js-pagination";
 import Modal from "react-modal";
 import Header from "../../components/header/Header";
 import { RiSignalWifiErrorLine, RiDeleteBin6Line } from "react-icons/ri";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-import { PaperIcon } from "../../SVGS";
+import { ContactIcon, FaqIcon, PaperIcon } from "../../SVGS";
 import NoDataView from "../../Error/NoDataView";
 import { deleteReview, getAllReviews } from "../../api/review";
 import { ErrorCode, ErrorMessages } from "../../constants/ErrorCodes";
@@ -16,15 +15,24 @@ import { BASE_URL } from "../../constants/ConstantVariable";
 import { PRIMARY } from "../../constants/Colors";
 import ModalComp from "../../components/modal/ModalComp";
 import { FiEdit } from "react-icons/fi";
+import { deleteFaq, getAllFaqs } from "../../api/faq";
+import { getServiceCards } from "../../api/service";
+import icons_bank from "../../Icons";
+import {
+  deleteWhyChooseUsCards,
+  getWhyChooseUsCards,
+} from "../../api/WhyChooseUs";
 
-export default function Reviews() {
+export default function Speciality() {
   const icon = () => {
-    return <PaperIcon width="26" height="30" fill={PRIMARY} />;
+    return <ContactIcon width="26" height="30" fill={PRIMARY} />;
   };
 
   const location = useLocation();
   const CurrPage =
     location.state && location.state ? location.state.page : null;
+
+  const navigate = useNavigate();
 
   const [page, setPage] = useState(CurrPage !== null ? CurrPage : 1);
   const [limit, setLimit] = useState(10);
@@ -57,7 +65,7 @@ export default function Reviews() {
   const fetchData = (pageNumber, searchTxt) => {
     setErr(false);
     setisLoading(true);
-    getAllReviews(limit, pageNumber, searchTxt)
+    getWhyChooseUsCards()
       .then(({ data }) => {
         setisLoading(false);
         if (data.error_code == ErrorCode.success) {
@@ -106,21 +114,29 @@ export default function Reviews() {
     <>
       <div className="mainDashView">
         <div>
-          <Header svg={icon} DashboardNavText="Reviews" />
+          <Header svg={icon} DashboardNavText="Speciality Cards" />
         </div>
 
         <div className="dashPanel border-lt-Gra" style={{ padding: "4% 2%" }}>
           <div className="r-ViewBar">
-            <div className="r-ViewBar2">
-              <div>
-                <input
-                  type="search"
-                  value={searchString}
-                  onChange={handleSearch}
-                  placeholder="Search"
-                  className="rolesSearch"
-                />
-              </div>
+            <div
+              className="r-ViewBar2"
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <button
+                className="editPage_btn"
+                style={{ backgroundColor: PRIMARY, color: "white" }}
+                disabled={isLoading}
+                onClick={() => {
+                  navigate("/dashboard/speciality/add");
+                }}
+              >
+                Add
+              </button>
             </div>
           </div>
           {isLoading ? (
@@ -138,10 +154,9 @@ export default function Reviews() {
                     <table className="roleViewTable">
                       <thead>
                         <tr>
-                          <th>Photo</th>
-                          <th>Name</th>
-                          <th>Ratings</th>
-                          <th>Message</th>
+                          <th>Title</th>
+                          <th>Icon</th>
+                          <th>Description</th>
                           <th style={{ paddingRight: "20px" }}>Actions</th>
                         </tr>
                       </thead>
@@ -150,7 +165,7 @@ export default function Reviews() {
                           <Rows
                             data={data}
                             page={page}
-                            setIsDeleted={setIsDeleted}
+                            setIsDeleted={(id) => setIsDeleted(id)}
                           />
                         ))}
                       </tbody>
@@ -188,7 +203,7 @@ const Rows = ({ data, page, setIsDeleted }) => {
   const [imgErr, setImgErr] = useState(false);
   const [delErr, setdelErr] = useState(false);
   const [errMsg, setErrMsg] = useState("");
-
+  const Icon = icons_bank[data.icon_number - 1];
   const deleteOnclick = () => {
     setModalIsOpen(true);
   };
@@ -199,7 +214,7 @@ const Rows = ({ data, page, setIsDeleted }) => {
       id: data ? data.id : null,
     };
     setIsLoading(true);
-    deleteReview(obj)
+    deleteWhyChooseUsCards(obj)
       .then(({ data }) => {
         setIsLoading(false);
         if (data.error_code == ErrorCode.success) {
@@ -219,10 +234,15 @@ const Rows = ({ data, page, setIsDeleted }) => {
         setIsLoading(false);
       });
   };
-
   const handleImageErr = () => {
     setImgErr(true);
   };
+
+  function editData() {
+    navigate("/dashboard/speciality/edit", {
+      state: { editData: data },
+    });
+  }
 
   return (
     <>
@@ -241,30 +261,22 @@ const Rows = ({ data, page, setIsDeleted }) => {
       />
       {data ? (
         <tr>
-          <td>
-            <img
-              src={imgErr ? noImage : BASE_URL + data.image}
-              onError={handleImageErr}
-              alt="img"
-              height={"28"}
-              width={"28"}
-              style={{
-                borderRadius: "100%",
-                border: "1px solid lightgray",
-                borderBlockColor: "lightgray",
-              }}
-            />
+          <td className="break-line-200">
+            {data?.heading?.length > 150
+              ? data.heading.substring(0, 145) + "..."
+              : data.heading}
           </td>
-          <td className="break-line-170">
-            {data.name.length > 30
-              ? data.name.substring(0, 30) + "..."
-              : data.name}
-          </td>
-          <td className="break-line-170">{data.star}</td>
           <td className="break-line-270">
-            {data.written_review.length > 150
-              ? data.written_review.substring(0, 145) + "..."
-              : data.written_review}
+            {data.icon_number && data.icon_number != 0 ? (
+              <Icon size={20} fill={PRIMARY} />
+            ) : (
+              "None"
+            )}
+          </td>
+          <td className="break-line-300">
+            {data?.description?.length > 350
+              ? data.description.substring(0, 345) + "..."
+              : data.description}
           </td>
           <td
             style={{
@@ -273,6 +285,9 @@ const Rows = ({ data, page, setIsDeleted }) => {
               minWidth: "60px",
             }}
           >
+            <button onClick={editData} className="Actionbtn editBtn">
+              <FiEdit />
+            </button>
             <button onClick={deleteOnclick} className="Actionbtn delBtn">
               <RiDeleteBin6Line />
             </button>

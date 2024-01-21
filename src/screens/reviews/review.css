@@ -2,6 +2,7 @@
   display: flex;
   justify-content: space-between;
   margin: 5px 0px;
+  margin-bottom: 10px;
   align-items: center;
 }
 .r-ViewBar2 {
@@ -57,7 +58,7 @@ tbody {
   color: rgb(90, 89, 89);
   position: sticky;
   top: 0px;
-  z-index: 1;
+  /* z-index: 1; */
 }
 
 .roleViewTable th,

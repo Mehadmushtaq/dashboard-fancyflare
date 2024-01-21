@@ -22,6 +22,34 @@
   justify-content: space-between;
   padding: 4% 4%;
 }
+.description_text {
+  padding: 20px 12px;
+  /* height: 20px; */
+  min-width: 200px;
+  width: 400px;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-radius: 7px;
+  font-family: var(--var-font-family);
+  color: grey;
+}
+.description_text:focus {
+  outline: none;
+  border: 1px solid lightgrey;
+  background-color: white;
+  color: black;
+}
+
+.ar-selectText {
+  margin-left: 2px;
+  margin-top: 22px;
+  font-weight: 500;
+  color: rgb(88, 86, 86);
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
 .ae-form {
   display: block;
   min-width: 500px;

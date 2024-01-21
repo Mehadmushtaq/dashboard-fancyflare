@@ -228,7 +228,10 @@ const Rows = ({ data, page, setIsDeleted }) => {
       <ModalComp
         isVisible={modalIsOpen}
         isCaution
-        setIsVisible={setModalIsOpen}
+        setIsVisible={() => {
+          setdelErr(false);
+          setModalIsOpen(false);
+        }}
         isErr={delErr}
         errMsg={errMsg}
         onClick={deleteClick}

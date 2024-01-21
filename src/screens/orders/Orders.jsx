@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import "./review.css";
 import Pagination from "react-js-pagination";
+import "./order.css";
 import Modal from "react-modal";
 import Header from "../../components/header/Header";
 import { RiSignalWifiErrorLine, RiDeleteBin6Line } from "react-icons/ri";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-import { PaperIcon } from "../../SVGS";
+import { ContactIcon, FaqIcon, OrdersIcon, PaperIcon } from "../../SVGS";
 import NoDataView from "../../Error/NoDataView";
 import { deleteReview, getAllReviews } from "../../api/review";
 import { ErrorCode, ErrorMessages } from "../../constants/ErrorCodes";
@@ -16,15 +16,25 @@ import { BASE_URL } from "../../constants/ConstantVariable";
 import { PRIMARY } from "../../constants/Colors";
 import ModalComp from "../../components/modal/ModalComp";
 import { FiEdit } from "react-icons/fi";
+import { deleteFaq, getAllFaqs } from "../../api/faq";
+import { getServiceCards } from "../../api/service";
+import icons_bank from "../../Icons";
+import {
+  deleteWhyChooseUsCards,
+  getWhyChooseUsCards,
+} from "../../api/WhyChooseUs";
+import { deleteOrder, getAllOrders } from "../../api/order";
 
-export default function Reviews() {
+export default function Orders() {
   const icon = () => {
-    return <PaperIcon width="26" height="30" fill={PRIMARY} />;
+    return <OrdersIcon width="26" height="30" fill={PRIMARY} />;
   };
 
   const location = useLocation();
   const CurrPage =
     location.state && location.state ? location.state.page : null;
+
+  const navigate = useNavigate();
 
   const [page, setPage] = useState(CurrPage !== null ? CurrPage : 1);
   const [limit, setLimit] = useState(10);
@@ -57,7 +67,7 @@ export default function Reviews() {
   const fetchData = (pageNumber, searchTxt) => {
     setErr(false);
     setisLoading(true);
-    getAllReviews(limit, pageNumber, searchTxt)
+    getAllOrders(null, searchTxt)
       .then(({ data }) => {
         setisLoading(false);
         if (data.error_code == ErrorCode.success) {
@@ -106,12 +116,17 @@ export default function Reviews() {
     <>
       <div className="mainDashView">
         <div>
-          <Header svg={icon} DashboardNavText="Reviews" />
+          <Header svg={icon} DashboardNavText="Orders" />
         </div>
 
         <div className="dashPanel border-lt-Gra" style={{ padding: "4% 2%" }}>
           <div className="r-ViewBar">
-            <div className="r-ViewBar2">
+            <div
+              className="r-ViewBar2"
+              style={{
+                width: "100%",
+              }}
+            >
               <div>
                 <input
                   type="search"
@@ -138,10 +153,12 @@ export default function Reviews() {
                     <table className="roleViewTable">
                       <thead>
                         <tr>
-                          <th>Photo</th>
-                          <th>Name</th>
-                          <th>Ratings</th>
-                          <th>Message</th>
+                          <th>First Name</th>
+                          <th>Last Name</th>
+                          <th>Phone</th>
+                          <th>Email</th>
+                          <th>Amount</th>
+                          <th>Details</th>
                           <th style={{ paddingRight: "20px" }}>Actions</th>
                         </tr>
                       </thead>
@@ -150,7 +167,7 @@ export default function Reviews() {
                           <Rows
                             data={data}
                             page={page}
-                            setIsDeleted={setIsDeleted}
+                            setIsDeleted={(id) => setIsDeleted(id)}
                           />
                         ))}
                       </tbody>
@@ -188,7 +205,6 @@ const Rows = ({ data, page, setIsDeleted }) => {
   const [imgErr, setImgErr] = useState(false);
   const [delErr, setdelErr] = useState(false);
   const [errMsg, setErrMsg] = useState("");
-
   const deleteOnclick = () => {
     setModalIsOpen(true);
   };
@@ -199,7 +215,7 @@ const Rows = ({ data, page, setIsDeleted }) => {
       id: data ? data.id : null,
     };
     setIsLoading(true);
-    deleteReview(obj)
+    deleteOrder(obj)
       .then(({ data }) => {
         setIsLoading(false);
         if (data.error_code == ErrorCode.success) {
@@ -220,9 +236,11 @@ const Rows = ({ data, page, setIsDeleted }) => {
       });
   };
 
-  const handleImageErr = () => {
-    setImgErr(true);
-  };
+  function viewData() {
+    navigate("/dashboard/order/view", {
+      state: { editData: data },
+    });
+  }
 
   return (
     <>
@@ -241,30 +259,31 @@ const Rows = ({ data, page, setIsDeleted }) => {
       />
       {data ? (
         <tr>
-          <td>
-            <img
-              src={imgErr ? noImage : BASE_URL + data.image}
-              onError={handleImageErr}
-              alt="img"
-              height={"28"}
-              width={"28"}
-              style={{
-                borderRadius: "100%",
-                border: "1px solid lightgray",
-                borderBlockColor: "lightgray",
-              }}
-            />
+          <td className="break-line-170">
+            {data?.firstName?.length > 150
+              ? data.firstName.substring(0, 145) + "..."
+              : data.firstName}
           </td>
           <td className="break-line-170">
-            {data.name.length > 30
-              ? data.name.substring(0, 30) + "..."
-              : data.name}
+            {data?.lastName?.length > 150
+              ? data.lastName.substring(0, 145) + "..."
+              : data.lastName}
           </td>
-          <td className="break-line-170">{data.star}</td>
+          <td className="break-line-170">
+            {data?.phone?.length > 150
+              ? data.phone.substring(0, 145) + "..."
+              : data.phone}
+          </td>
           <td className="break-line-270">
-            {data.written_review.length > 150
-              ? data.written_review.substring(0, 145) + "..."
-              : data.written_review}
+            {data?.email?.length > 200
+              ? data.email.substring(0, 200) + "..."
+              : data.email}
+          </td>
+          <td className="break-line-270">{data?.amount}</td>
+          <td>
+            <span onClick={viewData} className="view_details">
+              View Details
+            </span>
           </td>
           <td
             style={{

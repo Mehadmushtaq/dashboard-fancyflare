@@ -1,0 +1,51 @@
+.view_details {
+}
+.view_details:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.payment_main_container {
+  /* background-color: red; */
+  display: flex;
+  flex-direction: column;
+  /* flex-wrap: wrap; */
+  padding: 1%;
+  height: 68vh;
+  overflow-y: scroll;
+}
+.booking_details {
+  display: flex;
+  justify-content: space-between;
+  /* flex-direction: column; */
+  flex-wrap: wrap;
+  padding: 10px 5px;
+}
+.booking_data {
+  margin: 15px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid lightgray;
+  display: flex;
+  justify-content: space-between;
+  width: 45%;
+  padding: 5px;
+}
+.booking_data_question {
+  font-weight: 600;
+  font-size: 0.96rem;
+  color: var(--headings-color);
+}
+.booking_data_selection {
+  font-size: 0.94rem;
+  margin-left: 10px;
+}
+.extras_booking_details_main h4 {
+  padding-top: 15px;
+}
+.editPage_btn.order {
+  color: var(--primary-color);
+  transition: 0.5s ease-in-out;
+}
+.editPage_btn.order:hover {
+  color: white;
+  background-color: var(--primary-color);
+}

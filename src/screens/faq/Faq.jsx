@@ -17,7 +17,7 @@ import ModalComp from "../../components/modal/ModalComp";
 import { FiEdit } from "react-icons/fi";
 import { deleteFaq, getAllFaqs } from "../../api/faq";
 
-export default function () {
+export default function Faq() {
   const icon = () => {
     return <FaqIcon width="26" height="30" fill={PRIMARY} />;
   };
@@ -242,7 +242,10 @@ const Rows = ({ data, page, setIsDeleted }) => {
       <ModalComp
         isVisible={modalIsOpen}
         isCaution
-        setIsVisible={setModalIsOpen}
+        setIsVisible={() => {
+          setdelErr(false);
+          setModalIsOpen(false);
+        }}
         isErr={delErr}
         errMsg={errMsg}
         onClick={deleteClick}

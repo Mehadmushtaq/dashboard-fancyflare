@@ -4,15 +4,17 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Logo from "../../assets/logo.png";
 import {
   ContactIcon,
+  CustomerIcon,
   DashbboardIcon,
   EmployeeIcon,
   FaqIcon,
+  InventoryIcon,
+  OrdersIcon,
   PaperIcon,
 } from "../../SVGS";
 import { PRIMARY } from "../../constants/Colors";
 
 function Sidebar() {
-  const [screenName, setScreenName] = useState("Dashboard");
   let height = "24"; // these are the sizes of icons
   let width = "22";
   let size = "22";
@@ -70,6 +72,84 @@ function Sidebar() {
               </span>
             </NavLink>
 
+            <NavLink
+              to="/dashboard/order"
+              className="subCat"
+              style={ActiveStyle}
+            >
+              <span className="subCatsvgs">
+                <OrdersIcon
+                  fill="currentColor"
+                  stroke="currentColor"
+                  height={height}
+                  width={width}
+                  size={size}
+                />
+              </span>
+              <span
+                className="subCatText"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  height: "27px",
+                }}
+              >
+                Orders
+              </span>
+            </NavLink>
+
+            <NavLink
+              to="/dashboard/speciality"
+              className="subCat"
+              style={ActiveStyle}
+            >
+              <span className="subCatsvgs">
+                <ContactIcon
+                  fill="currentColor"
+                  stroke="currentColor"
+                  height={height}
+                  width={width}
+                  size={size}
+                />
+              </span>
+              <span
+                className="subCatText"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  height: "27px",
+                }}
+              >
+                Speciality Cards
+              </span>
+            </NavLink>
+
+            <NavLink
+              to="/dashboard/service-cards"
+              className="subCat"
+              style={ActiveStyle}
+            >
+              <span className="subCatsvgs">
+                <ContactIcon
+                  fill="currentColor"
+                  stroke="currentColor"
+                  height={height}
+                  width={width}
+                  size={size}
+                />
+              </span>
+              <span
+                className="subCatText"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  height: "27px",
+                }}
+              >
+                Service Cards
+              </span>
+            </NavLink>
+
             <NavLink to="/dashboard/faq" className="subCat" style={ActiveStyle}>
               <span className="subCatsvgs">
                 <FaqIcon
@@ -124,7 +204,7 @@ function Sidebar() {
               style={ActiveStyle}
             >
               <span className="subCatsvgs">
-                <ContactIcon
+                <EmployeeIcon
                   fill="currentColor"
                   stroke="currentColor"
                   height={height}
