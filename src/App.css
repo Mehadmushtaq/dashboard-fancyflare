@@ -194,7 +194,7 @@ input::-webkit-inner-spin-button {
 .ae-formFields {
   display: flex;
   margin-bottom: 16px;
-  /* justify-content: space-between; */
+flex-wrap: wrap;
 }
 
 .ae-selectText {

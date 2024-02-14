@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-import { generateCode, login, resetPassword, verifyCode } from "../../api/user";
-import { ErrorCode, ErrorMessages } from "../../constants/ErrorCodes";
-import { ADMIN_EMAIL } from "../../constants/ConstantVariable";
+import React, { useState, useEffect } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
+import { generateCode, login, resetPassword, verifyCode } from '../../api/user';
+import { ErrorCode, ErrorMessages } from '../../constants/ErrorCodes';
+import { ADMIN_EMAIL } from '../../constants/ConstantVariable';
 
 export default function ForgetPass() {
-  const [code, setCode] = useState("");
-  const [pass, setPass] = useState("");
-  const [confirmPass, setConfirmPass] = useState("");
+  const [code, setCode] = useState('');
+  const [pass, setPass] = useState('');
+  const [confirmPass, setConfirmPass] = useState('');
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [isCodeVerified, setIsCodeVerified] = useState(false);
   const [codeErr, setCodeErr] = useState(false);
@@ -17,19 +17,19 @@ export default function ForgetPass() {
   const [view, setview] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isErr, setIsErr] = useState(false);
-  const navigate = useNavigate("");
+  const navigate = useNavigate('');
 
   const sendCodeOnclick = () => {
     setIsLoading(true);
     generateCode({ email: ADMIN_EMAIL })
       .then(({ data }) => {
         setIsLoading(false);
-        if (data.error_code == ErrorCode.success) {
+        if (data.error_code === ErrorCode.success) {
           setview(2);
           setIsCodeSent(true);
         } else if (
-          data.error_code == ErrorCode.invalid_cred ||
-          data.error_code == ErrorCode.not_exist
+          data.error_code === ErrorCode.invalid_cred ||
+          data.error_code === ErrorCode.not_exist
         ) {
           alert(ErrorMessages.invalid_credentials);
           //   setErrMsg(ErrorMessages.invalid_credentials);
@@ -49,17 +49,17 @@ export default function ForgetPass() {
       verifyCode(obj)
         .then(({ data }) => {
           setIsLoading(false);
-          if (data.error_code == ErrorCode.success) {
+          if (data.error_code === ErrorCode.success) {
             setview(3);
             setIsCodeSent(false);
             setIsCodeVerified(true);
           } else if (
-            data.error_code == ErrorCode.invalid_cred ||
-            data.error_code == ErrorCode.not_exist
+            data.error_code === ErrorCode.invalid_cred ||
+            data.error_code === ErrorCode.not_exist
           ) {
             setIsErr(true);
             // alert(ErrorMessages.invalid_credentials);
-          } else alert("Some error occured.");
+          } else alert('Some error occured.');
         })
         .catch(() => {
           setIsLoading(false);
@@ -77,8 +77,8 @@ export default function ForgetPass() {
       resetPassword(obj)
         .then(({ data }) => {
           setIsLoading(false);
-          if (data.error_code == ErrorCode.success) {
-            navigate("/");
+          if (data.error_code === ErrorCode.success) {
+            navigate('/');
           }
         })
         .catch(() => {
@@ -89,44 +89,44 @@ export default function ForgetPass() {
   }
 
   return (
-    <div className="main_container_login">
-      {view == 1 ? (
-        <div className="login-MainContainer">
+    <div className='main_container_login'>
+      {view === 1 ? (
+        <div className='login-MainContainer'>
           {isCodeSent || isCodeVerified ? null : (
-            <div className="login-logo">
-              <h4 style={{ color: "white" }}>Send code on email</h4>
+            <div className='login-logo'>
+              <h4 style={{ color: 'white' }}>Send code on email</h4>
             </div>
           )}
-          <div className="loginbuttonDiv">
+          <div className='loginbuttonDiv'>
             <button
-              className="loginbutton"
+              className='loginbutton'
               disabled={isLoading}
               onClick={sendCodeOnclick}
             >
-              {isLoading ? <LoadingSpinner /> : "Send code"}
+              {isLoading ? <LoadingSpinner /> : 'Send code'}
             </button>
           </div>
         </div>
-      ) : view == 2 ? (
-        <div className="login-MainContainer">
+      ) : view === 2 ? (
+        <div className='login-MainContainer'>
           <div>
-            <div style={{ position: "relative" }}>
-              <div className="login-field">
+            <div style={{ position: 'relative' }}>
+              <div className='login-field'>
                 <input
-                  className="login-input border"
-                  placeholder="Enter the code send on your email"
-                  type="number"
-                  defaultValue={code ? code : ""}
+                  className='login-input border'
+                  placeholder='Enter the code send on your email'
+                  type='number'
+                  defaultValue={code ? code : ''}
                   onChange={(e) => {
                     setCode(e.target.value);
                     setCodeErr(false);
                     setIsErr(false);
                   }}
-                  style={{ width: "100%", margin: "10px 0" }}
+                  style={{ width: '100%', margin: '10px 0' }}
                 />
-                <label htmlFor="email"></label>
+                <label htmlFor='email'></label>
                 {codeErr ? (
-                  <div className="invalid_err" style={{ top: "-7px" }}>
+                  <div className='invalid_err' style={{ top: '-7px' }}>
                     Code is required*
                   </div>
                 ) : null}
@@ -134,75 +134,75 @@ export default function ForgetPass() {
             </div>
           </div>
 
-          <div className="loginbuttonDiv">
-            {isErr ? <div className="ErrMsg">Invalid code</div> : null}
+          <div className='loginbuttonDiv'>
+            {isErr ? <div className='ErrMsg'>Invalid code</div> : null}
             <button
-              className="loginbutton"
+              className='loginbutton'
               disabled={isLoading}
               onClick={verifyCodeOnclick}
             >
-              {isLoading ? <LoadingSpinner /> : "Verify Code"}
+              {isLoading ? <LoadingSpinner /> : 'Verify Code'}
             </button>
           </div>
         </div>
       ) : (
-        <div className="login-MainContainer">
+        <div className='login-MainContainer'>
           {isCodeSent || isCodeVerified ? null : (
-            <div className="login-logo">
-              <h4 style={{ color: "white" }}>Reset Password</h4>
+            <div className='login-logo'>
+              <h4 style={{ color: 'white' }}>Reset Password</h4>
             </div>
           )}
 
           <div
             style={{
-              marginTop: "20px",
+              marginTop: '20px',
             }}
           >
-            <div style={{ position: "relative" }}>
-              <div className="login-field email">
+            <div style={{ position: 'relative' }}>
+              <div className='login-field email'>
                 <input
-                  className="login-input border"
-                  placeholder="Password"
-                  type="text"
-                  defaultValue={pass ? pass : ""}
+                  className='login-input border'
+                  placeholder='Password'
+                  type='text'
+                  defaultValue={pass ? pass : ''}
                   onChange={(e) => {
                     setPass(e.target.value);
                     setPassErr(false);
                   }}
                 />
-                <label htmlFor="email"></label>
-                {passErr ? <div className="invalid_err">Required*</div> : null}
+                <label htmlFor='email'></label>
+                {passErr ? <div className='invalid_err'>Required*</div> : null}
               </div>
             </div>
           </div>
           <div>
-            <div style={{ position: "relative" }}>
-              <div className="login-field email">
+            <div style={{ position: 'relative' }}>
+              <div className='login-field email'>
                 <input
-                  className="login-input border"
-                  placeholder="Confirm password"
-                  type="text"
-                  defaultValue={confirmPass ? confirmPass : ""}
+                  className='login-input border'
+                  placeholder='Confirm password'
+                  type='text'
+                  defaultValue={confirmPass ? confirmPass : ''}
                   onChange={(e) => {
                     setConfirmErr(false);
                     setConfirmPass(e.target.value);
                   }}
                 />
-                <label htmlFor="email"></label>
+                <label htmlFor='email'></label>
                 {confirmErr ? (
-                  <div className="invalid_err">Both fields not matched</div>
+                  <div className='invalid_err'>Both fields not matched</div>
                 ) : null}
               </div>
             </div>
           </div>
 
-          <div className="loginbuttonDiv">
+          <div className='loginbuttonDiv'>
             <button
-              className="loginbutton"
+              className='loginbutton'
               disabled={isLoading}
               onClick={resetPass}
             >
-              {isLoading ? <LoadingSpinner /> : "Reset"}
+              {isLoading ? <LoadingSpinner /> : 'Reset'}
             </button>
           </div>
         </div>

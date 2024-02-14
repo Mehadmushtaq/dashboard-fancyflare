@@ -62,6 +62,30 @@
   /* justify-content: space-between; */
 }
 
+.ae-selectField {
+  margin: 20px;
+  
+}
+.custom-select {
+  width: 200px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: white;
+  color: grey;
+}
+
+.custom-select option {
+  padding: 8px;
+}
+
+input[type='checkbox'] { 
+  width: 25px;
+  height: 25px;
+  margin-top: 5px;
+ }
+
 .ae-selectText {
   font-weight: 500;
   color: rgb(88, 86, 86);
@@ -69,4 +93,49 @@
   margin-bottom: 5px;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+.container {
+  display: flex;
+}
+
+.box {
+  margin: 10px;
+  padding: 10px;
+  border: 2px dotted #ccc;
+  cursor: pointer;
+}
+
+.box-label {
+  font-weight: bold;
+}
+
+.input-file {
+  display: none;
+}
+
+.image-container {
+  position: relative;
+  margin-top: 10px;
+
+}
+
+.image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.remove-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 3px;
+  background-color: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
 }

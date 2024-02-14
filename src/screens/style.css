@@ -41,7 +41,7 @@
 .welcome_text {
   display: flex;
   flex-direction: column;
-  font-size: 1.1rem;
+  font-size: 2rem;
   margin: 5px 0px;
 }
 .owner_text {

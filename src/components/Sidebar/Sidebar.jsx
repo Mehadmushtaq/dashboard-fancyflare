@@ -1,71 +1,61 @@
-import { React, useEffect, useState } from "react";
-import "./Sidebar.css";
-import { NavLink, useNavigate } from "react-router-dom";
-import Logo from "../../assets/logo.png";
+import { React } from 'react';
+import './Sidebar.css';
+import { NavLink } from 'react-router-dom';
+import Logo from '../../assets/logo-croped.png';
 import {
   ContactIcon,
-  CustomerIcon,
   DashbboardIcon,
   EmployeeIcon,
-  FaqIcon,
   InventoryIcon,
   OrdersIcon,
   PaperIcon,
-} from "../../SVGS";
-import { PRIMARY } from "../../constants/Colors";
+} from '../../SVGS';
+import { PRIMARY } from '../../constants/Colors';
 
 function Sidebar() {
-  let height = "24"; // these are the sizes of icons
-  let width = "22";
-  let size = "22";
-
-  const navigate = useNavigate();
-  // useEffect(() => {
-  //   let user = JSON.parse(localStorage.getItem("adminUser"));
-  //   if (!user) {
-  //     navigate("/");
-  //   }
-  // }, []);
+  let height = '24'; // these are the sizes of icons
+  let width = '22';
+  let size = '22';
 
   const ActiveStyle = ({ isActive }) => {
     return {
-      backgroundColor: isActive ? "white" : "",
-      color: isActive ? PRIMARY : "",
-      textDecoration: "none",
-      border: "none",
-      borderRadius: "7px",
+      backgroundColor: isActive ? 'white' : '',
+      color: isActive ? PRIMARY : '',
+      textDecoration: 'none',
+      border: 'none',
+      borderRadius: '7px',
     };
   };
 
   return (
-    <nav className="">
-      <div className="sidebar_main">
-        <div className="logo">
-          <img style={{ height: "67px", width: "73%" }} src={Logo} alt="logo" />
+    <nav className=''>
+      <div className='sidebar_main'>
+        <div className='logo'>
+          <img style={{ height: '40px', width: '80%' }} src={Logo} alt='logo' />
         </div>
 
-        <div className="catageory">
-          <div className="subCatBox">
+        <div className='catageory'>
+          <div className='subCatBox'>
             <NavLink
-              to="/dashboard/main"
-              className="subCat"
+              to='/dashboard/main'
+              className='subCat'
               style={ActiveStyle}
             >
-              <span className="subCatsvgs">
+              <span className='subCatsvgs'>
                 <DashbboardIcon
-                  fill="currentColor"
-                  stroke="currentColor"
+                  fill='currentColor'
+                  stroke='currentColor'
                   height={height}
                   width={width}
                   size={size}
                 />
               </span>
               <span
-                className="subCatText"
+                className='subCatText'
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  height: "27px",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  height: '27px',
                 }}
               >
                 Dashboard
@@ -73,25 +63,25 @@ function Sidebar() {
             </NavLink>
 
             <NavLink
-              to="/dashboard/order"
-              className="subCat"
+              to='/dashboard/order'
+              className='subCat'
               style={ActiveStyle}
             >
-              <span className="subCatsvgs">
+              <span className='subCatsvgs'>
                 <OrdersIcon
-                  fill="currentColor"
-                  stroke="currentColor"
+                  fill='currentColor'
+                  stroke='currentColor'
                   height={height}
                   width={width}
                   size={size}
                 />
               </span>
               <span
-                className="subCatText"
+                className='subCatText'
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  height: "27px",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  height: '27px',
                 }}
               >
                 Orders
@@ -99,99 +89,102 @@ function Sidebar() {
             </NavLink>
 
             <NavLink
-              to="/dashboard/speciality"
-              className="subCat"
+              to='/dashboard/subscribers'
+              className='subCat'
               style={ActiveStyle}
             >
-              <span className="subCatsvgs">
+              <span className='subCatsvgs'>
                 <ContactIcon
-                  fill="currentColor"
-                  stroke="currentColor"
+                  fill='currentColor'
+                  stroke='currentColor'
                   height={height}
                   width={width}
                   size={size}
                 />
               </span>
               <span
-                className="subCatText"
+                className='subCatText'
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  height: "27px",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  height: '27px',
                 }}
               >
-                Speciality Cards
+                Subscribers
               </span>
             </NavLink>
 
             <NavLink
-              to="/dashboard/service-cards"
-              className="subCat"
+              to='/dashboard/products'
+              className='subCat'
               style={ActiveStyle}
             >
-              <span className="subCatsvgs">
-                <ContactIcon
-                  fill="currentColor"
-                  stroke="currentColor"
+              <span className='subCatsvgs'>
+                <InventoryIcon
+                  fill='currentColor'
+                  stroke='currentColor'
                   height={height}
                   width={width}
                   size={size}
                 />
               </span>
               <span
-                className="subCatText"
+                className='subCatText'
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  height: "27px",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  height: '27px',
                 }}
               >
-                Service Cards
+                Products
               </span>
             </NavLink>
-
-            <NavLink to="/dashboard/faq" className="subCat" style={ActiveStyle}>
-              <span className="subCatsvgs">
-                <FaqIcon
-                  fill="currentColor"
-                  stroke="currentColor"
+            <NavLink
+              to='/dashboard/categories'
+              className='subCat'
+              style={ActiveStyle}
+            >
+              <span className='subCatsvgs'>
+                <EmployeeIcon
+                  fill='currentColor'
+                  stroke='currentColor'
                   height={height}
                   width={width}
                   size={size}
                 />
               </span>
               <span
-                className="subCatText"
+                className='subCatText'
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  height: "27px",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  height: '27px',
                 }}
               >
-                FAQ's
+                Categories
               </span>
             </NavLink>
 
             <NavLink
-              to="/dashboard/reviews"
-              className="subCat"
+              to='/dashboard/reviews'
+              className='subCat'
               style={ActiveStyle}
             >
-              <span className="subCatsvgs">
+              <span className='subCatsvgs'>
                 <PaperIcon
-                  fill="currentColor"
-                  stroke="currentColor"
+                  fill='currentColor'
+                  stroke='currentColor'
                   height={height}
                   width={width}
                   size={size}
                 />
               </span>
               <span
-                className="subCatText"
+                className='subCatText'
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  height: "27px",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  height: '27px',
                 }}
               >
                 Reviews
@@ -199,28 +192,54 @@ function Sidebar() {
             </NavLink>
 
             <NavLink
-              to="/dashboard/contacts"
-              className="subCat"
+              to='/dashboard/customers'
+              className='subCat'
               style={ActiveStyle}
             >
-              <span className="subCatsvgs">
+              <span className='subCatsvgs'>
                 <EmployeeIcon
-                  fill="currentColor"
-                  stroke="currentColor"
+                  fill='currentColor'
+                  stroke='currentColor'
                   height={height}
                   width={width}
                   size={size}
                 />
               </span>
               <span
-                className="subCatText"
+                className='subCatText'
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  height: "27px",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  height: '27px',
                 }}
               >
-                Clients
+                Customers
+              </span>
+            </NavLink>
+
+            <NavLink
+              to='/dashboard/hero-images'
+              className='subCat'
+              style={ActiveStyle}
+            >
+              <span className='subCatsvgs'>
+                <EmployeeIcon
+                  fill='currentColor'
+                  stroke='currentColor'
+                  height={height}
+                  width={width}
+                  size={size}
+                />
+              </span>
+              <span
+                className='subCatText'
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  height: '27px',
+                }}
+              >
+                Main Images
               </span>
             </NavLink>
           </div>

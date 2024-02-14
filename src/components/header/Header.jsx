@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
-import "./header.css";
-import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
-import noImage from "../../assets/placeholderAvatar.png";
-import { NavLink, useNavigate } from "react-router-dom";
-import { FiLogOut } from "react-icons/fi";
-import { DashbboardIcon } from "../../SVGS";
-import { PRIMARY } from "../../constants/Colors";
+import React, { useEffect, useRef, useState } from 'react';
+import './header.css';
+import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri';
+import noImage from '../../assets/placeholderAvatar.png';
+import { useNavigate } from 'react-router-dom';
+import { FiLogOut } from 'react-icons/fi';
+import { DashbboardIcon } from '../../SVGS';
+import { PRIMARY } from '../../constants/Colors';
 
 function DashNav(props) {
   const [imgErr, setImgErr] = useState(false);
@@ -15,14 +15,14 @@ function DashNav(props) {
     setImgErr(true);
   };
   const data = {
-    image_path: "../../Assests/profile2.jpeg",
+    image_path: '../../Assests/profile2.jpeg',
   };
 
   const dropdownRef = useRef();
   const navigate = useNavigate();
   const logoutOnclick = () => {
-    localStorage.removeItem("adminUser");
-    navigate("/");
+    localStorage.removeItem('loginUser');
+    navigate('/');
   };
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -31,9 +31,9 @@ function DashNav(props) {
   };
 
   useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
+    document.addEventListener('click', handleClickOutside);
     return () => {
-      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
   }, []);
   function handleDropdown() {
@@ -42,53 +42,53 @@ function DashNav(props) {
 
   return (
     <>
-      <div className="DashNav">
+      <div className='DashNav'>
         {props.svg ? (
           <div
-            className=""
+            className=''
             style={{
-              height: "40px",
-              display: "flex",
-              alignItems: "center",
+              height: '40px',
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
-            <span className="svg">
+            <span className='svg'>
               <props.svg />
             </span>
-            <span className="NavView">{props.DashboardNavText}</span>
+            <span className='NavView'>{props.DashboardNavText}</span>
             {props.DashboardNavSubText ? (
-              <div className="NavViewSubText">{props.DashboardNavSubText}</div>
+              <div className='NavViewSubText'>{props.DashboardNavSubText}</div>
             ) : null}
           </div>
         ) : (
-          <div className="svgnText">
-            <span className="svg">
-              <DashbboardIcon fill={PRIMARY} size="26" />
+          <div className='svgnText'>
+            <span className='svg'>
+              <DashbboardIcon fill={PRIMARY} size='26' />
             </span>
-            <span className="NavView">Dashboard</span>
+            <span className='NavView'>Dashboard</span>
           </div>
         )}
 
         <div ref={dropdownRef}>
-          <div className="dashNavProfile" onClick={handleDropdown}>
+          <div className='dashNavProfile' onClick={handleDropdown}>
             <img
-              className="dashNavProfileImg"
+              className='dashNavProfileImg'
               src={imgErr ? noImage : data.image_path}
               onError={handleImageErr}
-              alt="pp"
-            ></img>
+              alt='pp'
+            />
             <p>Admin</p>
             <span>
               {isClick ? (
-                <RiArrowDropUpLine size={28} viewBox="0 -1 22 22" />
+                <RiArrowDropUpLine size={28} viewBox='0 -1 22 22' />
               ) : (
-                <RiArrowDropDownLine size={28} viewBox="0 -1 22 22" />
+                <RiArrowDropDownLine size={28} viewBox='0 -1 22 22' />
               )}
             </span>
           </div>
-          <div class={isClick ? "dropdown-content-show" : "dropdown-content"}>
-            <div className="myDropdown">
-              <div onClick={logoutOnclick} className="dropLinks">
+          <div class={isClick ? 'dropdown-content-show' : 'dropdown-content'}>
+            <div className='myDropdown'>
+              <div onClick={logoutOnclick} className='dropLinks'>
                 <FiLogOut />
                 <span>Logout</span>
               </div>

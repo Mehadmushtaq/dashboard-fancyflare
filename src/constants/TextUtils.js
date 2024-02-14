@@ -10,7 +10,7 @@ export function isNull(str) {
 }
 
 export function isEmpty(str) {
-  return str === "";
+  return str === '';
 }
 export function stringsNotEqual(str1, str2) {
   return str1 !== str2;
@@ -26,12 +26,12 @@ export function isNullArray(array) {
 }
 
 export function isEmptyArray(array) {
-  if (array == undefined) return true;
+  if (array === undefined) return true;
   return array.length === 0;
 }
 
 export function phoneLengthNotValid(str) {
-  if (str.length != 11) return true;
+  if (str.length !== 11) return true;
 }
 
 export function isValidEmail(email) {
@@ -40,5 +40,5 @@ export function isValidEmail(email) {
 }
 
 export function stringsEqual(str1, str2) {
-  return str1 == str2;
+  return str1 === str2;
 }

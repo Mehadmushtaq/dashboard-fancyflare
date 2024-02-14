@@ -1,38 +1,56 @@
-import React, { useState, useEffect } from 'react';
-import Pagination from 'react-js-pagination';
+import React, { useState, useEffect, useRef } from 'react';
 import Modal from 'react-modal';
 import Header from '../../components/header/Header';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { useLocation, useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
-import { ContactIcon, PaperIcon } from '../../SVGS';
+import { NewsPaper } from '../../SVGS';
 import NoDataView from '../../Error/NoDataView';
 import { ErrorCode, ErrorMessages } from '../../constants/ErrorCodes';
 import { PRIMARY } from '../../constants/Colors';
 import ModalComp from '../../components/modal/ModalComp';
-import { deleteContact, getAllContact } from '../../api/ContactUs';
-import { FiEdit } from 'react-icons/fi';
+import icons_bank from '../../Icons';
 
-export default function ContactUsers() {
+import {
+  deleteImage,
+  getSliderImages,
+  postImages,
+} from '../../api/sliderImages';
+
+export default function HeroImages() {
   const icon = () => {
-    return <ContactIcon width='26' height='30' fill={PRIMARY} />;
+    return <NewsPaper width='26' height='30' fill={PRIMARY} />;
   };
 
   const location = useLocation();
   const CurrPage =
     location.state && location.state ? location.state.page : null;
 
-  const navigate = useNavigate();
-
   const [page, setPage] = useState(CurrPage !== null ? CurrPage : 1);
-  const [limit, setLimit] = useState(10);
-  const [totalRecords, setTotalRecords] = useState(10);
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [paginationDisplay, setPaginationDisplay] = useState('block');
   const [err, setErr] = useState(false);
   const [searchString, setSearchString] = useState('');
+
+  const [selectedFileName, setSelectedFileName] = useState('');
+  const [selectedFile, setSelectedFile] = useState('');
+  const fileInputRef = useRef(null);
+
+  const handleImageUploadClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      setSelectedFileName(file.name);
+    }
+  };
 
   useEffect(() => {
     window.scrollTo({
@@ -55,7 +73,7 @@ export default function ContactUsers() {
   const fetchData = (pageNumber, searchTxt) => {
     setErr(false);
     setisLoading(true);
-    getAllContact(limit, pageNumber, searchTxt)
+    getSliderImages()
       .then(({ data }) => {
         setisLoading(false);
         if (data.error_code === ErrorCode.success) {
@@ -70,6 +88,18 @@ export default function ContactUsers() {
           setErr(true);
           setErrorMsg(data.message);
         }
+      })
+      .catch((err) => {
+        setErr(true);
+        setErrorMsg(ErrorMessages.network_error);
+        setisLoading(false);
+      });
+  };
+
+  const saveOnclick = () => {
+    postImages(selectedFile)
+      .then(({ data }) => {
+        setSelectedFileName('');
       })
       .catch((err) => {
         setErr(true);
@@ -100,45 +130,16 @@ export default function ContactUsers() {
     setData([...arr]);
   }
 
+  console.log({ data });
+
   return (
     <>
       <div className='mainDashView'>
         <div>
-          <Header svg={icon} DashboardNavText='Customers' />
+          <Header svg={icon} DashboardNavText='MainImages' />
         </div>
 
         <div className='dashPanel border-lt-Gra' style={{ padding: '4% 2%' }}>
-          <div className='r-ViewBar'>
-            <div
-              className='r-ViewBar2'
-              style={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'space-between',
-              }}
-            >
-              <div>
-                <input
-                  type='search'
-                  value={searchString}
-                  onChange={handleSearch}
-                  placeholder='Search'
-                  className='rolesSearch'
-                />
-              </div>
-
-              <button
-                className='editPage_btn'
-                style={{ backgroundColor: PRIMARY, color: 'white' }}
-                disabled={isLoading}
-                onClick={() => {
-                  navigate('/dashboard/customer/add');
-                }}
-              >
-                Add
-              </button>
-            </div>
-          </div>
           {isLoading ? (
             <LoadingSpinner height={'40px'} width={'40px'} />
           ) : (
@@ -148,48 +149,100 @@ export default function ContactUsers() {
                   {errorMsg}
                 </div>
               ) : null}
-              {data?.length > 0 ? (
-                <div className='main_content_container'>
-                  <div className='tableContainer'>
-                    <table className='roleViewTable'>
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Email</th>
-                          <th>Password</th>
-                          <th style={{ paddingRight: '20px' }}>Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {data?.map((data) => (
-                          <Rows
-                            key={data.id}
-                            data={data}
-                            page={page}
-                            setIsDeleted={setIsDeleted}
-                          />
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+              <h2 style={{ marginBottom: '2rem' }}>Images</h2>
+
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                }}
+              >
+                <div
+                  className='left'
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <input
+                    type='file'
+                    accept='image/jpeg, image/png, image/jpg'
+                    hidden
+                    onChange={handleFileChange}
+                    ref={fileInputRef}
+                  />
                   <div
-                    className='paginationDiv'
-                    style={{ display: paginationDisplay }}
+                    onClick={handleImageUploadClick}
+                    style={{
+                      border: '2px dotted grey',
+                      height: '40vh',
+                      width: '70vh',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                    }}
                   >
-                    <Pagination
-                      activePage={page}
-                      itemsCountPerPage={limit}
-                      totalItemsCount={totalRecords}
-                      pageRangeDisplayed={3}
-                      onChange={(pageNumber) => {
-                        handlePageChange(pageNumber);
-                      }}
-                    />
+                    Select Image
                   </div>
+                  {selectedFileName && (
+                    <div
+                      style={{
+                        color: 'blue',
+                        marginTop: '20px',
+                      }}
+                    >
+                      Selected Image: {selectedFileName}
+                    </div>
+                  )}
+
+                  <button
+                    className='editPage_btn'
+                    style={{
+                      marginTop: '20px',
+                    }}
+                    disabled={!selectedFileName}
+                    onClick={saveOnclick}
+                  >
+                    Upload
+                  </button>
                 </div>
-              ) : (
-                <NoDataView />
-              )}
+
+                <div className='right'>
+                  {data?.length > 0 ? (
+                    <div
+                      style={{
+                        overflowY: 'scroll',
+                        maxHeight: '70vh',
+                      }}
+                    >
+                      <div className='tableContainer'>
+                        <table className='roleViewTable'>
+                          <tbody>
+                            {data?.map((dta) => (
+                              <Rows
+                                key={dta.id}
+                                data={dta}
+                                page={page}
+                                setIsDeleted={(id) => setIsDeleted(id)}
+                              />
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div
+                        className='paginationDiv'
+                        style={{ display: paginationDisplay }}
+                      ></div>
+                    </div>
+                  ) : (
+                    <NoDataView />
+                  )}
+                </div>
+              </div>
             </>
           )}
         </div>
@@ -204,10 +257,11 @@ const Rows = ({ data, page, setIsDeleted }) => {
   const [imgErr, setImgErr] = useState(false);
   const [delErr, setdelErr] = useState(false);
   const [errMsg, setErrMsg] = useState('');
-
+  const Icon = icons_bank[data.icon_number - 1];
   const deleteOnclick = () => {
     setModalIsOpen(true);
   };
+  console.log({ data });
 
   const deleteClick = () => {
     setdelErr(false);
@@ -215,7 +269,7 @@ const Rows = ({ data, page, setIsDeleted }) => {
       id: data ? data.id : null,
     };
     setIsLoading(true);
-    deleteContact(obj)
+    deleteImage(obj)
       .then(({ data }) => {
         setIsLoading(false);
         if (data.error_code === ErrorCode.success) {
@@ -236,16 +290,6 @@ const Rows = ({ data, page, setIsDeleted }) => {
       });
   };
 
-  const handleImageErr = () => {
-    setImgErr(true);
-  };
-
-  function editData() {
-    navigate('/dashboard/customer/edit', {
-      state: { editData: data },
-    });
-  }
-
   return (
     <>
       <ModalComp
@@ -263,22 +307,13 @@ const Rows = ({ data, page, setIsDeleted }) => {
       />
       {data ? (
         <tr>
-          <td className='break-line-170'>
-            {data?.name?.length > 30
-              ? data.name.substring(0, 30) + '...'
-              : data.name}
+          <td className='break-line-200'>
+            <img
+              src={`${process.env.REACT_APP_BASE_URL}${data?.image_url}`}
+              height='100rem'
+              width='175rem'
+            />
           </td>
-          <td className='break-line-170'>
-            {data?.email?.length > 30
-              ? data.email.substring(0, 30) + '...'
-              : data.email}
-          </td>
-          <td className='break-line-170'>
-            {data?.password?.length > 30
-              ? data.password.substring(0, 30) + '...'
-              : data.password}
-          </td>
-
           <td
             style={{
               display: 'flex',
@@ -286,9 +321,6 @@ const Rows = ({ data, page, setIsDeleted }) => {
               minWidth: '60px',
             }}
           >
-            <button onClick={editData} className='Actionbtn editBtn'>
-              <FiEdit />
-            </button>
             <button onClick={deleteOnclick} className='Actionbtn delBtn'>
               <RiDeleteBin6Line />
             </button>

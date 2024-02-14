@@ -1,5 +1,5 @@
-import React from "react";
-import "./InputField.css";
+import React from 'react';
+import './InputField.css';
 
 export default function InputField({
   isEdit,
@@ -14,14 +14,14 @@ export default function InputField({
   max,
   ...props
 }) {
-  const Placeholder = props.placeholder ? props.placeholder : "Enter Text";
-  const Type = props.type ? props.type : "text";
+  const Placeholder = props.placeholder ? props.placeholder : 'Enter Text';
+  const Type = props.type ? props.type : 'text';
   const cat = props.cat ? props.cat : Placeholder;
 
   return (
     <>
-      <label className="input-main-style">
-        <div className="if-txt">{cat}</div>
+      <label className='input-main-style'>
+        <div className='if-txt'>{cat}</div>
         <input
           type={Type}
           name={name}
@@ -35,21 +35,21 @@ export default function InputField({
           placeholder={Placeholder}
           max={max}
           style={{
-            borderRadius: props.radius ? props.radius : "10px",
-            width: props.width ? props.width : "",
-            border: props.isErr ? "1px solid red" : "",
-            borderColor: props.isErr ? "red;" : "",
-            backgroundColor: props.isErr ? "white" : "white",
+            borderRadius: props.radius ? props.radius : '10px',
+            width: props.width ? props.width : '',
+            border: props.isErr ? '1px solid red' : '',
+            borderColor: props.isErr ? 'red;' : '',
+            backgroundColor: props.isErr ? 'white' : 'white',
           }}
-          className="if-input"
+          className='if-input'
         />
         {props.isErr ? (
           <div
-            className="err-txt"
+            className='err-txt'
             style={{
-              display: "flex",
-              width: "150px",
-              position: "absolute",
+              display: 'flex',
+              width: '150px',
+              position: 'absolute',
             }}
           >
             {props.errorMsg}

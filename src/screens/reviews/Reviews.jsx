@@ -1,25 +1,21 @@
-import React, { useState, useEffect } from "react";
-import "./review.css";
-import Pagination from "react-js-pagination";
-import Modal from "react-modal";
-import Header from "../../components/header/Header";
-import { RiSignalWifiErrorLine, RiDeleteBin6Line } from "react-icons/ri";
-import { useLocation, useNavigate } from "react-router-dom";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-import { PaperIcon } from "../../SVGS";
-import NoDataView from "../../Error/NoDataView";
-import { deleteReview, getAllReviews } from "../../api/review";
-import { ErrorCode, ErrorMessages } from "../../constants/ErrorCodes";
-import { ConsoleData } from "../../constants/CommonFunctions";
-import noImage from "../../assets/avatar1.png";
-import { BASE_URL } from "../../constants/ConstantVariable";
-import { PRIMARY } from "../../constants/Colors";
-import ModalComp from "../../components/modal/ModalComp";
-import { FiEdit } from "react-icons/fi";
+import React, { useState, useEffect } from 'react';
+import './review.css';
+import Pagination from 'react-js-pagination';
+import Modal from 'react-modal';
+import Header from '../../components/header/Header';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import { useLocation, useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
+import { PaperIcon } from '../../SVGS';
+import NoDataView from '../../Error/NoDataView';
+import { deleteReview, getAllReviews } from '../../api/review';
+import { ErrorCode, ErrorMessages } from '../../constants/ErrorCodes';
+import { PRIMARY } from '../../constants/Colors';
+import ModalComp from '../../components/modal/ModalComp';
 
 export default function Reviews() {
   const icon = () => {
-    return <PaperIcon width="26" height="30" fill={PRIMARY} />;
+    return <PaperIcon width='26' height='30' fill={PRIMARY} />;
   };
 
   const location = useLocation();
@@ -31,23 +27,23 @@ export default function Reviews() {
   const [totalRecords, setTotalRecords] = useState(10);
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
-  const [paginationDisplay, setPaginationDisplay] = useState("block");
+  const [errorMsg, setErrorMsg] = useState('');
+  const [paginationDisplay, setPaginationDisplay] = useState('block');
   const [err, setErr] = useState(false);
-  const [searchString, setSearchString] = useState("");
+  const [searchString, setSearchString] = useState('');
 
   useEffect(() => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
     fetchData(page);
-    Modal.setAppElement("#root");
+    Modal.setAppElement('#root');
   }, []);
 
   useEffect(() => {
     const delay = setTimeout(() => {
-      if (searchString.trim() !== "") fetchData(page, searchString);
+      if (searchString.trim() !== '') fetchData(page, searchString);
     }, 1500);
     return () => {
       clearTimeout(delay);
@@ -60,12 +56,12 @@ export default function Reviews() {
     getAllReviews(limit, pageNumber, searchTxt)
       .then(({ data }) => {
         setisLoading(false);
-        if (data.error_code == ErrorCode.success) {
+        if (data.error_code === ErrorCode.success) {
           setData(data.result);
-        } else if (data.error_code == ErrorCode.not_exist) {
+        } else if (data.error_code === ErrorCode.not_exist) {
           setData([]);
-          setErrorMsg("No data found");
-        } else if (data.error_code == ErrorCode.failed) {
+          setErrorMsg('No data found');
+        } else if (data.error_code === ErrorCode.failed) {
           setErr(true);
           setErrorMsg(ErrorMessages.failed);
         } else {
@@ -83,7 +79,7 @@ export default function Reviews() {
   const handlePageChange = (pageNumber) => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
     if (pageNumber >= 1) {
       fetchData(pageNumber, searchString);
@@ -92,7 +88,7 @@ export default function Reviews() {
 
   const handleSearch = (e) => {
     setSearchString(e.target.value);
-    if (e.target.value === "") {
+    if (e.target.value === '') {
       fetchData(page);
     }
   };
@@ -104,50 +100,49 @@ export default function Reviews() {
 
   return (
     <>
-      <div className="mainDashView">
+      <div className='mainDashView'>
         <div>
-          <Header svg={icon} DashboardNavText="Reviews" />
+          <Header svg={icon} DashboardNavText='Reviews' />
         </div>
 
-        <div className="dashPanel border-lt-Gra" style={{ padding: "4% 2%" }}>
-          <div className="r-ViewBar">
-            <div className="r-ViewBar2">
+        <div className='dashPanel border-lt-Gra' style={{ padding: '4% 2%' }}>
+          <div className='r-ViewBar'>
+            <div className='r-ViewBar2'>
               <div>
                 <input
-                  type="search"
+                  type='search'
                   value={searchString}
                   onChange={handleSearch}
-                  placeholder="Search"
-                  className="rolesSearch"
+                  placeholder='Search'
+                  className='rolesSearch'
                 />
               </div>
             </div>
           </div>
           {isLoading ? (
-            <LoadingSpinner height={"40px"} width={"40px"} />
+            <LoadingSpinner height={'40px'} width={'40px'} />
           ) : (
             <>
               {err ? (
-                <div className="network-err-msg" style={{ display: "flex" }}>
+                <div className='network-err-msg' style={{ display: 'flex' }}>
                   {errorMsg}
                 </div>
               ) : null}
               {data?.length > 0 ? (
-                <div className="main_content_container">
-                  <div className="tableContainer">
-                    <table className="roleViewTable">
+                <div className='main_content_container'>
+                  <div className='tableContainer'>
+                    <table className='roleViewTable'>
                       <thead>
                         <tr>
-                          <th>Photo</th>
-                          <th>Name</th>
                           <th>Ratings</th>
                           <th>Message</th>
-                          <th style={{ paddingRight: "20px" }}>Actions</th>
+                          <th style={{ paddingRight: '20px' }}>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         {data?.map((data) => (
                           <Rows
+                            key={data.id}
                             data={data}
                             page={page}
                             setIsDeleted={setIsDeleted}
@@ -157,7 +152,7 @@ export default function Reviews() {
                     </table>
                   </div>
                   <div
-                    className="paginationDiv"
+                    className='paginationDiv'
                     style={{ display: paginationDisplay }}
                   >
                     <Pagination
@@ -187,7 +182,7 @@ const Rows = ({ data, page, setIsDeleted }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [imgErr, setImgErr] = useState(false);
   const [delErr, setdelErr] = useState(false);
-  const [errMsg, setErrMsg] = useState("");
+  const [errMsg, setErrMsg] = useState('');
 
   const deleteOnclick = () => {
     setModalIsOpen(true);
@@ -202,10 +197,10 @@ const Rows = ({ data, page, setIsDeleted }) => {
     deleteReview(obj)
       .then(({ data }) => {
         setIsLoading(false);
-        if (data.error_code == ErrorCode.success) {
+        if (data.error_code === ErrorCode.success) {
           setModalIsOpen(false);
           setIsDeleted(obj?.id);
-        } else if (data.error_code == ErrorCode.failed) {
+        } else if (data.error_code === ErrorCode.failed) {
           setdelErr(true);
           setErrMsg(ErrorMessages.failed);
         } else {
@@ -237,43 +232,24 @@ const Rows = ({ data, page, setIsDeleted }) => {
         errMsg={errMsg}
         onClick={deleteClick}
         isLoading={isLoading}
-        msg={"Are you sure you want to delete?"}
+        msg={'Are you sure you want to delete?'}
       />
       {data ? (
         <tr>
-          <td>
-            <img
-              src={imgErr ? noImage : BASE_URL + data.image}
-              onError={handleImageErr}
-              alt="img"
-              height={"28"}
-              width={"28"}
-              style={{
-                borderRadius: "100%",
-                border: "1px solid lightgray",
-                borderBlockColor: "lightgray",
-              }}
-            />
-          </td>
-          <td className="break-line-170">
-            {data.name.length > 30
-              ? data.name.substring(0, 30) + "..."
-              : data.name}
-          </td>
-          <td className="break-line-170">{data.star}</td>
-          <td className="break-line-270">
-            {data.written_review.length > 150
-              ? data.written_review.substring(0, 145) + "..."
-              : data.written_review}
+          <td className='break-line-170'>{data.star}</td>
+          <td className='break-line-170'>
+            {data.review.length > 30
+              ? data.review.substring(0, 30) + '...'
+              : data.review}
           </td>
           <td
             style={{
-              display: "flex",
-              justifyContent: "center",
-              minWidth: "60px",
+              display: 'flex',
+              justifyContent: 'center',
+              minWidth: '60px',
             }}
           >
-            <button onClick={deleteOnclick} className="Actionbtn delBtn">
+            <button onClick={deleteOnclick} className='Actionbtn delBtn'>
               <RiDeleteBin6Line />
             </button>
           </td>
