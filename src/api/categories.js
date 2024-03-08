@@ -10,9 +10,9 @@ export const postCategory = (data) => {
   return api.post('api/category/post', data);
 };
 
-export const deleteImage = (data) => {
+export const deleteCategory = (data) => {
   const api = apiInstance();
-  return api.post('/api/slider-image/delete', data);
+  return api.post('/api/category/delete', data);
 };
 
 export const getAllCategories = () => {

@@ -96,7 +96,7 @@ export default function ContactUsers() {
   };
 
   function setIsDeleted(id) {
-    let arr = [...data.filter((item) => item.id != id)];
+    let arr = [...data.filter((item) => item.id !== id)];
     setData([...arr]);
   }
 

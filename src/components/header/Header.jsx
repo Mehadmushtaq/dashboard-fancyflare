@@ -86,7 +86,9 @@ function DashNav(props) {
               )}
             </span>
           </div>
-          <div class={isClick ? 'dropdown-content-show' : 'dropdown-content'}>
+          <div
+            className={isClick ? 'dropdown-content-show' : 'dropdown-content'}
+          >
             <div className='myDropdown'>
               <div onClick={logoutOnclick} className='dropLinks'>
                 <FiLogOut />

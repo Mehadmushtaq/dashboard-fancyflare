@@ -1,4 +1,4 @@
-import { apiInstance } from './apiMiddleware';
+import { apiFormDataInstance, apiInstance } from './apiMiddleware';
 
 export const getSliderImages = () => {
   const api = apiInstance();
@@ -8,8 +8,7 @@ export const getSliderImages = () => {
 export const postImages = (image) => {
   const formData = new FormData();
   formData.append('image', image);
-  console.log(formData.get('image'));
-  const api = apiInstance();
+  const api = apiFormDataInstance();
   return api.post('api/slider-image/post', formData);
 };
 

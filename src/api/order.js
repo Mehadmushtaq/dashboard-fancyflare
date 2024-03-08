@@ -15,5 +15,5 @@ export const postOrder = (data) => {
 
 export const deleteOrder = (data) => {
   const api = apiInstance();
-  return api.post('api/order-detail/delete', data);
+  return api.post('api/checkout/delete', data);
 };

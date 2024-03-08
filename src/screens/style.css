@@ -12,6 +12,7 @@
   height: 80vh;
   max-height: 80vh;
   box-shadow: 0 0 15px 3px #eae9e9;
+  /* overflow: hidden; */
 }
 .mainDashPanel {
   display: flex;

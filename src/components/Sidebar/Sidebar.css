@@ -23,7 +23,6 @@ nav {
   display: flex;
   justify-content: center;
   margin-top: 50px;
-  margin-bottom: 40px;
 }
 .screenName {
   display: flex;
@@ -43,7 +42,6 @@ nav {
   color: white;
 }
 .catageory {
-  margin: 9px 0px;
   padding: 10px 20px;
   border-radius: 15px;
   height: 700px;

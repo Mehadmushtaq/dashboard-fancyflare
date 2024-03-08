@@ -10,9 +10,9 @@ export const getAllContact = (limit, pageNumber, searchTxt) => {
   return api.get('api/user/get-all');
 };
 
-export const contactUsPost = (data) => {
+export const postContact = (data) => {
   const api = apiInstance();
-  return api.post('api/contact-us/post', data);
+  return api.post('api/user/post', data);
 };
 export const deleteContact = (data) => {
   const api = apiInstance();

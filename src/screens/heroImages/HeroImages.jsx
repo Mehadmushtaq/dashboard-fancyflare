@@ -34,8 +34,8 @@ export default function HeroImages() {
   const [err, setErr] = useState(false);
   const [searchString, setSearchString] = useState('');
 
-  const [selectedFileName, setSelectedFileName] = useState('');
   const [selectedFile, setSelectedFile] = useState('');
+  const [selectedImg, setSelectedImg]=useState('');
   const fileInputRef = useRef(null);
 
   const handleImageUploadClick = () => {
@@ -48,7 +48,7 @@ export default function HeroImages() {
     const file = event.target.files[0];
     if (file) {
       setSelectedFile(file);
-      setSelectedFileName(file.name);
+      setSelectedImg(URL.createObjectURL(file));
     }
   };
 
@@ -97,9 +97,12 @@ export default function HeroImages() {
   };
 
   const saveOnclick = () => {
+    setisLoading(true);
     postImages(selectedFile)
       .then(({ data }) => {
-        setSelectedFileName('');
+        setisLoading(false);
+        setData((prev) => [data.result, ...prev]);
+        setSelectedImg('');
       })
       .catch((err) => {
         setErr(true);
@@ -126,11 +129,9 @@ export default function HeroImages() {
   };
 
   function setIsDeleted(id) {
-    let arr = [...data.filter((item) => item.id != id)];
+    let arr = [...data.filter((item) => item.id !== id)];
     setData([...arr]);
   }
-
-  console.log({ data });
 
   return (
     <>
@@ -184,18 +185,23 @@ export default function HeroImages() {
                       justifyContent: 'center',
                       alignItems: 'center',
                       cursor: 'pointer',
+                      backgroundImage: `url(${selectedImg})`,
+                      backgroundPosition: 'center center',
+                      backgroundSize: 'cover',
+                      position:"relative",
                     }}
                   >
-                    Select Image
+                  {!selectedImg && "Select Image to upload"}
                   </div>
-                  {selectedFileName && (
+                  
+                  {selectedImg && (
                     <div
                       style={{
-                        color: 'blue',
+                        color: 'red',
                         marginTop: '20px',
                       }}
                     >
-                      Selected Image: {selectedFileName}
+                     Click to change
                     </div>
                   )}
 
@@ -204,7 +210,7 @@ export default function HeroImages() {
                     style={{
                       marginTop: '20px',
                     }}
-                    disabled={!selectedFileName}
+                    disabled={!selectedImg|| data.length >= 5}
                     onClick={saveOnclick}
                   >
                     Upload
@@ -261,7 +267,6 @@ const Rows = ({ data, page, setIsDeleted }) => {
   const deleteOnclick = () => {
     setModalIsOpen(true);
   };
-  console.log({ data });
 
   const deleteClick = () => {
     setdelErr(false);

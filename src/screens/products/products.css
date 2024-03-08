@@ -63,12 +63,21 @@
 }
 
 .ae-selectField {
-  margin: 20px;
+  margin: 1rem 0rem;
   
 }
 .custom-select {
-  width: 200px;
+  width: 20vw;
   padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: white;
+  color: grey;
+}
+.type-select {
+  width: 19vw;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
@@ -138,4 +147,36 @@ input[type='checkbox'] {
   border-radius: 50%;
   width: 20px;
   height: 20px;
+}
+
+.product-topbar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0rem 0.5rem;
+}
+
+.product-leftpanel{
+  background-color: #f6f6f6;
+  padding: 1.5rem 2rem 1rem 1.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem; 
+}
+
+/* table */
+
+table{
+  width: 100%;
+}
+th{
+  padding: 3px;
+}
+
+table input[type='text'] {
+  padding: 0.5rem;
+  width: 8rem;
+}
+table input[type='tel']{
+  padding: 0.5rem;
 }

@@ -80,7 +80,7 @@ function Login() {
       <div className='login-MainContainer'>
         <div className='login-logo'>
           <span className='logoImg'>
-            <img height='30' width='auto' src={Logo} alt='logo' />
+            <img height='100' width='auto' src={Logo} alt='logo' />
           </span>
         </div>
 

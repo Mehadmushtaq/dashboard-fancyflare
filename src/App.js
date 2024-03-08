@@ -6,8 +6,6 @@ import Welcome from './screens/Welcome';
 import Login from './screens/login/Login.jsx';
 import Reviews from './screens/reviews/Reviews.jsx';
 import ContactUsers from './screens/contactUsers/ContactUsers.jsx';
-import Products from './screens/products/Products.jsx';
-import ProductAddEdit from './screens/products/ProductAddEdit.jsx';
 import ForgetPass from './screens/forgetPassword/ForgetPass.jsx';
 import Subscribers from './screens/subscribers/Subscribers.jsx';
 import Orders from './screens/orders/Orders.jsx';
@@ -15,6 +13,9 @@ import OrdersAddEdit from './screens/orders/OrdersAddEdit.jsx';
 import CustomerAddEdit from './screens/contactUsers/CustomerAddEdit.jsx';
 import HeroImages from './screens/heroImages/HeroImages.jsx';
 import Categories from './screens/categories/Categories.jsx';
+import SubscribersPhone from './screens/subscribers-phone/SubscribersPhone.jsx';
+import Products from './screens/products/Products.jsx';
+import ProductAddEdit from './screens/products/ProductAddEdit.jsx';
 
 function App() {
   const Dashboard = () => {
@@ -48,9 +49,11 @@ function App() {
               path='/dashboard/customer/edit'
               element={<CustomerAddEdit isEdit />}
             />
-
             <Route path='/dashboard/products' element={<Products />} />
-            <Route path='/dashboard/product/add' element={<ProductAddEdit />} />
+            <Route
+              path='/dashboard/product/add'
+              element={<ProductAddEdit />}
+            />
             <Route
               path='/dashboard/product/view'
               element={<ProductAddEdit isView />}
@@ -61,6 +64,10 @@ function App() {
             />
 
             <Route path='/dashboard/subscribers' element={<Subscribers />} />
+            <Route
+              path='/dashboard/subscribers-phone'
+              element={<SubscribersPhone />}
+            />
 
             <Route path='/dashboard/order' element={<Orders />} />
             <Route path='/dashboard/order/view' element={<OrdersAddEdit />} />

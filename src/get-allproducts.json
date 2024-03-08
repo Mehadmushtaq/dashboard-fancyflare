@@ -1,0 +1,322 @@
+{
+  "error_code": 0,
+  "success": true,
+  "status": 200,
+  "total_records": 5,
+  "page_number": 1,
+  "total_pages": 1,
+  "result": [
+    {      "product": {
+        "id": 56,
+        "name": "test 7 eidted",
+        "price": 990909,
+        "is_discount": 1,
+        "after_discount_price": 10,
+        "is_main_product": null,
+        "size": "2-piece",
+        "is_stiched": 1,
+        "category_name": "Stiched",
+        "action_type": 2,
+        "createdAt": "2024-03-04T18:24:12.000Z",
+        "updatedAt": "2024-03-04T19:24:34.000Z"
+      },
+      "product_color": [
+        {
+          "id": 66,
+          "available_stock": null,
+          "color": "greeen",
+          "small_size_quantity": 6,
+          "small_size_price": 3,
+          "medium_size_quantity": 767,
+          "medium_size_price": 36898090,
+          "large_size_quantity": 6,
+          "large_size_price": 2323,
+          "extra_large_size_quantity": 4,
+          "extra_large_size_price": 435678
+        },
+        {
+          "id": 65,
+          "available_stock": null,
+          "color": "red",
+          "small_size_quantity": 45678,
+          "small_size_price": 786,
+          "medium_size_quantity": 567,
+          "medium_size_price": 7865433,
+          "large_size_quantity": 856,
+          "large_size_price": 443456,
+          "extra_large_size_quantity": 76,
+          "extra_large_size_price": 34
+        }
+      ],
+      "image_product": [
+        {
+          "id": 98,
+          "image_url": "product-image/1709576648472-Untitled.jpeg",
+          "is_main": 1,
+          "product_id": 56,
+          "action_type": 1
+        },
+        {
+          "id": 100,
+          "image_url": "product-image/1709576652055-Untitled2.jpeg",
+          "is_main": 0,
+          "product_id": 56,
+          "action_type": 1
+        },
+        {
+          "id": 99,
+          "image_url": "product-image/1709576648472-original-439642932cd31ee040fc7905169ff76a.png",
+          "is_main": 0,
+          "product_id": 56,
+          "action_type": 1
+        }
+      ],
+      "review": []
+    },
+    {
+      "product": {
+        "id": 30,
+        "name": "AFF-W3C39 Emboridered Neck Line 3pc Stitched Mareena Dress With Pashmina Shawel",
+        "price": 3499,
+        "is_discount": 0,
+        "after_discount_price": 0,
+        "is_main_product": null,
+        "size": "3-piece",
+        "is_stiched": null,
+        "category_name": "Winter",
+        "action_type": 1,
+        "createdAt": "2024-03-04T11:15:29.000Z",
+        "updatedAt": "2024-03-04T11:15:29.000Z"
+      },
+      "product_color": [
+        {
+          "id": 14,
+          "available_stock": null,
+          "color": "Cashnut",
+          "small_size_quantity": 13,
+          "small_size_price": 76,
+          "medium_size_quantity": 23,
+          "medium_size_price": 24,
+          "large_size_quantity": 16,
+          "large_size_price": 34,
+          "extra_large_size_quantity": 35,
+          "extra_large_size_price": 34
+        },
+        {
+          "id": 13,
+          "available_stock": null,
+          "color": "",
+          "small_size_quantity": 0,
+          "small_size_price": 0,
+          "medium_size_quantity": 0,
+          "medium_size_price": 0,
+          "large_size_quantity": 0,
+          "large_size_price": 0,
+          "extra_large_size_quantity": 0,
+          "extra_large_size_price": 0
+        }
+      ],
+      "image_product": [
+        {
+          "id": 46,
+          "image_url": "product-image/1709550929175-WhatsApp Image 2023-01-13 at 8.52.11 AM (1).jpeg",
+          "is_main": 0,
+          "product_id": 30,
+          "action_type": 1
+        },
+        {
+          "id": 45,
+          "image_url": "product-image/1709550929012-WhatsApp Image 2023-01-13 at 8.50.40 AM.jpeg",
+          "is_main": 0,
+          "product_id": 30,
+          "action_type": 1
+        },
+        {
+          "id": 44,
+          "image_url": "product-image/1709550928661-WhatsApp Image 2023-01-13 at 8.50.39 AM.jpeg",
+          "is_main": 1,
+          "product_id": 30,
+          "action_type": 1
+        }
+      ],
+      "review": []
+    },
+    {
+      "product": {
+        "id": 29,
+        "name": "AFF-P2W49  Embroidered 3pc Stitched Organza Dress With Organza Duppta",
+        "price": 3999,
+        "is_discount": 0,
+        "after_discount_price": 20,
+        "is_main_product": null,
+        "size": "3-piece",
+        "is_stiched": null,
+        "category_name": "Stiched",
+        "action_type": 1,
+        "createdAt": "2024-03-04T11:08:05.000Z",
+        "updatedAt": "2024-03-04T11:08:05.000Z"
+      },
+      "product_color": [
+        {
+          "id": 12,
+          "available_stock": null,
+          "color": "white",
+          "small_size_quantity": 24,
+          "small_size_price": 23,
+          "medium_size_quantity": 10,
+          "medium_size_price": 13,
+          "large_size_quantity": 32,
+          "large_size_price": 17,
+          "extra_large_size_quantity": 15,
+          "extra_large_size_price": 12
+        },
+        {
+          "id": 11,
+          "available_stock": null,
+          "color": "",
+          "small_size_quantity": 0,
+          "small_size_price": 0,
+          "medium_size_quantity": 0,
+          "medium_size_price": 0,
+          "large_size_quantity": 0,
+          "large_size_price": 0,
+          "extra_large_size_quantity": 0,
+          "extra_large_size_price": 0
+        }
+      ],
+      "image_product": [
+        {
+          "id": 43,
+          "image_url": "product-image/1709550485370-WhatsApp Image 2023-01-18 at 7.00.46 PM.jpeg",
+          "is_main": 0,
+          "product_id": 29,
+          "action_type": 1
+        },
+        {
+          "id": 42,
+          "image_url": "product-image/1709550485354-WhatsApp Image 2023-01-18 at 7.00.47 PM.jpeg",
+          "is_main": 0,
+          "product_id": 29,
+          "action_type": 1
+        },
+        {
+          "id": 41,
+          "image_url": "product-image/1709550484880-WhatsApp Image 2023-01-12 at 10.32.52 PM.jpeg",
+          "is_main": 1,
+          "product_id": 29,
+          "action_type": 1
+        }
+      ],
+      "review": []
+    },
+    {
+      "product": {
+        "id": 24,
+        "name": "testing product 12",
+        "price": 2000,
+        "is_discount": 1,
+        "after_discount_price": 100,
+        "is_main_product": 1,
+        "size": " wide range size",
+        "is_stiched": 1,
+        "category_name": "Stiched",
+        "action_type": 1,
+        "createdAt": "2024-02-20T04:20:34.000Z",
+        "updatedAt": "2024-03-02T07:31:06.000Z"
+      },
+      "product_color": [
+        {
+          "id": 2,
+          "available_stock": 8,
+          "color": "green",
+          "small_size_quantity": 2,
+          "small_size_price": 500,
+          "medium_size_quantity": 4,
+          "medium_size_price": 700,
+          "large_size_quantity": 2,
+          "large_size_price": 900,
+          "extra_large_size_quantity": 2,
+          "extra_large_size_price": 1000
+        },
+        {
+          "id": 1,
+          "available_stock": 10,
+          "color": "red",
+          "small_size_quantity": 2,
+          "small_size_price": 500,
+          "medium_size_quantity": 4,
+          "medium_size_price": 700,
+          "large_size_quantity": 2,
+          "large_size_price": 900,
+          "extra_large_size_quantity": 2,
+          "extra_large_size_price": 1000
+        }
+      ],
+      "image_product": [
+        {
+          "id": 37,
+          "image_url": "product-image/1708402834047-107228941-1682027700192-_DSC5658.jpg",
+          "is_main": 1,
+          "product_id": 24,
+          "action_type": 1
+        },
+        {
+          "id": 36,
+          "image_url": "product-image/1708402833837-107228941-1682027700192-_DSC5658.jpg",
+          "is_main": 0,
+          "product_id": 24,
+          "action_type": 1
+        },
+        {
+          "id": 35,
+          "image_url": "product-image/1708402833308-107228941-1682027700192-_DSC5658.jpg",
+          "is_main": 0,
+          "product_id": 24,
+          "action_type": 1
+        }
+      ],
+      "review": []
+    },
+    {
+      "product": {
+        "id": 23,
+        "name": "first stiched category product",
+        "price": 700,
+        "is_discount": 1,
+        "after_discount_price": 3,
+        "is_main_product": 0,
+        "size": "",
+        "is_stiched": 1,
+        "category_name": "Stiched",
+        "action_type": 1,
+        "createdAt": "2024-02-19T02:53:29.000Z",
+        "updatedAt": "2024-02-24T16:44:43.000Z"
+      },
+      "product_color": [],
+      "image_product": [
+        {
+          "id": 34,
+          "image_url": "product-image/1708311209305-top_rated_1.jpg",
+          "is_main": 0,
+          "product_id": 23,
+          "action_type": 1
+        },
+        {
+          "id": 33,
+          "image_url": "product-image/1708311209301-on_sale_2.jpg",
+          "is_main": 0,
+          "product_id": 23,
+          "action_type": 1
+        },
+        {
+          "id": 32,
+          "image_url": "product-image/1708311209264-top_rated_3.jpg",
+          "is_main": 1,
+          "product_id": 23,
+          "action_type": 1
+        }
+      ],
+      "review": []
+    }
+  ]
+}

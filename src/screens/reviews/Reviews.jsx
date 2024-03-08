@@ -94,7 +94,7 @@ export default function Reviews() {
   };
 
   function setIsDeleted(id) {
-    let arr = [...data.filter((item) => item.id != id)];
+    let arr = [...data.filter((item) => item.id !== id)];
     setData([...arr]);
   }
 

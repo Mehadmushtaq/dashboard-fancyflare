@@ -2,14 +2,16 @@ import { React } from 'react';
 import './Sidebar.css';
 import { NavLink } from 'react-router-dom';
 import Logo from '../../assets/logo-croped.png';
+
 import {
   ContactIcon,
   DashbboardIcon,
   EmployeeIcon,
-  InventoryIcon,
   OrdersIcon,
   PaperIcon,
 } from '../../SVGS';
+import { FaRegImages } from 'react-icons/fa';
+import { MdOutlineInventory2, MdOutlineCategory } from 'react-icons/md';
 import { PRIMARY } from '../../constants/Colors';
 
 function Sidebar() {
@@ -31,7 +33,11 @@ function Sidebar() {
     <nav className=''>
       <div className='sidebar_main'>
         <div className='logo'>
-          <img style={{ height: '40px', width: '80%' }} src={Logo} alt='logo' />
+          <img
+            style={{ height: '100px', width: 'auto' }}
+            src={Logo}
+            alt='logo'
+          />
         </div>
 
         <div className='catageory'>
@@ -113,6 +119,31 @@ function Sidebar() {
                 Subscribers
               </span>
             </NavLink>
+            <NavLink
+              to='/dashboard/subscribers-phone'
+              className='subCat'
+              style={ActiveStyle}
+            >
+              <span className='subCatsvgs'>
+                <ContactIcon
+                  fill='currentColor'
+                  stroke='currentColor'
+                  height={height}
+                  width={width}
+                  size={size}
+                />
+              </span>
+              <span
+                className='subCatText'
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  height: '27px',
+                }}
+              >
+                Subscribers-Phone
+              </span>
+            </NavLink>
 
             <NavLink
               to='/dashboard/products'
@@ -120,7 +151,7 @@ function Sidebar() {
               style={ActiveStyle}
             >
               <span className='subCatsvgs'>
-                <InventoryIcon
+                <MdOutlineInventory2
                   fill='currentColor'
                   stroke='currentColor'
                   height={height}
@@ -145,7 +176,7 @@ function Sidebar() {
               style={ActiveStyle}
             >
               <span className='subCatsvgs'>
-                <EmployeeIcon
+                <MdOutlineCategory
                   fill='currentColor'
                   stroke='currentColor'
                   height={height}
@@ -223,7 +254,7 @@ function Sidebar() {
               style={ActiveStyle}
             >
               <span className='subCatsvgs'>
-                <EmployeeIcon
+                <FaRegImages
                   fill='currentColor'
                   stroke='currentColor'
                   height={height}

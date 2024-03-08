@@ -12,9 +12,9 @@ import { PRIMARY } from '../../constants/Colors';
 import ModalComp from '../../components/modal/ModalComp';
 import icons_bank from '../../Icons';
 import {
-  deleteWhyChooseUsCards,
-  getWhyChooseUsCards,
-} from '../../api/WhyChooseUs';
+  deleteEmailSubscriber,
+  getEmailSubscribers,
+} from '../../api/subscribers';
 
 export default function Subscribers() {
   const icon = () => {
@@ -56,7 +56,7 @@ export default function Subscribers() {
   const fetchData = (pageNumber, searchTxt) => {
     setErr(false);
     setisLoading(true);
-    getWhyChooseUsCards()
+    getEmailSubscribers()
       .then(({ data }) => {
         setisLoading(false);
         if (data.error_code === ErrorCode.success) {
@@ -97,11 +97,9 @@ export default function Subscribers() {
   };
 
   function setIsDeleted(id) {
-    let arr = [...data.filter((item) => item.id != id)];
+    let arr = [...data.filter((item) => item.id !== id)];
     setData([...arr]);
   }
-
-  console.log({ data });
 
   return (
     <>
@@ -126,7 +124,7 @@ export default function Subscribers() {
                     <table className='roleViewTable'>
                       <thead>
                         <tr>
-                          <th>Name</th>
+                          {/* <th>Name</th> */}
                           <th>Email</th>
                           <th style={{ paddingRight: '20px' }}>Actions</th>
                         </tr>
@@ -186,7 +184,7 @@ const Rows = ({ data, page, setIsDeleted }) => {
       id: data ? data.id : null,
     };
     setIsLoading(true);
-    deleteWhyChooseUsCards(obj)
+    deleteEmailSubscriber(obj)
       .then(({ data }) => {
         setIsLoading(false);
         if (data.error_code === ErrorCode.success) {
@@ -206,9 +204,6 @@ const Rows = ({ data, page, setIsDeleted }) => {
         setIsLoading(false);
       });
   };
-  const handleImageErr = () => {
-    setImgErr(true);
-  };
 
   return (
     <>
@@ -227,7 +222,7 @@ const Rows = ({ data, page, setIsDeleted }) => {
       />
       {data ? (
         <tr>
-          <td className='break-line-200'>{data?.name}</td>
+          {/* <td className='break-line-200'>{data?.name}</td> */}
           <td className='break-line-200'>{data?.email}</td>
 
           <td

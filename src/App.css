@@ -129,6 +129,8 @@ input::-webkit-inner-spin-button {
 }
 .pagination li a:hover {
   background-color: #f3f3f3;
+  color: #242424;
+
 }
 .pagination .active a {
   background: var(--primary-color);

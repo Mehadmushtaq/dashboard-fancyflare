@@ -7,7 +7,7 @@ import Header from '../../components/header/Header';
 import { ContactIcon } from '../../SVGS';
 import { PRIMARY } from '../../constants/Colors';
 import { ErrorCode, ErrorMessages } from '../../constants/ErrorCodes';
-import { postWhyChooseUsCards } from '../../api/WhyChooseUs';
+import { postContact } from '../../api/ContactUs';
 
 export default function CustomerAddEdit({ isEdit }) {
   const icon = () => {
@@ -49,14 +49,13 @@ export default function CustomerAddEdit({ isEdit }) {
     if (isValidData()) {
       let obj = {
         id: newData.id,
-
         name: newData.name,
         email: newData.email,
         password: newData.password,
       };
       setErr(false);
       setIsLoading(true);
-      postWhyChooseUsCards(obj)
+      postContact(obj)
         .then(({ data }) => {
           setIsLoading(false);
           if (

@@ -12,6 +12,7 @@ import { ErrorCode, ErrorMessages } from '../../constants/ErrorCodes';
 import { PRIMARY } from '../../constants/Colors';
 import ModalComp from '../../components/modal/ModalComp';
 import { deleteOrder, getAllOrders } from '../../api/order';
+import { GrView } from 'react-icons/gr';
 
 export default function Orders() {
   const icon = () => {
@@ -96,7 +97,7 @@ export default function Orders() {
   };
 
   function setIsDeleted(id) {
-    let arr = [...data.filter((item) => item.id != id)];
+    let arr = [...data.filter((item) => item.id !== id)];
     setData([...arr]);
   }
 
@@ -144,9 +145,8 @@ export default function Orders() {
                           <th>First Name</th>
                           <th>Last Name</th>
                           <th>Phone</th>
-                          <th>Email</th>
                           <th>Amount</th>
-                          <th>Details</th>
+                          <th>Payment Method</th>
                           <th style={{ paddingRight: '20px' }}>Actions</th>
                         </tr>
                       </thead>
@@ -249,31 +249,25 @@ const Rows = ({ data, page, setIsDeleted }) => {
       {data ? (
         <tr>
           <td className='break-line-170'>
-            {data?.firstName?.length > 150
-              ? data.firstName.substring(0, 145) + '...'
-              : data.firstName}
+            {data?.first_name?.length > 150
+              ? data.first_name.substring(0, 145) + '...'
+              : data.first_name}
           </td>
           <td className='break-line-170'>
-            {data?.lastName?.length > 150
-              ? data.lastName.substring(0, 145) + '...'
-              : data.lastName}
+            {data?.last_name?.length > 150
+              ? data.last_name.substring(0, 145) + '...'
+              : data.last_name}
           </td>
           <td className='break-line-170'>
-            {data?.phone?.length > 150
-              ? data.phone.substring(0, 145) + '...'
-              : data.phone}
+            {data?.contact_number?.length > 150
+              ? data.contact_number.substring(0, 145) + '...'
+              : data.contact_number}
           </td>
+          <td className='break-line-270'>{data?.total_amount}</td>
           <td className='break-line-270'>
-            {data?.email?.length > 200
-              ? data.email.substring(0, 200) + '...'
-              : data.email}
+            {data?.payment_method === 1 ? 'credit card' : 'cash on delivery'}
           </td>
-          <td className='break-line-270'>{data?.amount}</td>
-          <td>
-            <span onClick={viewData} className='view_details'>
-              View Details
-            </span>
-          </td>
+
           <td
             style={{
               display: 'flex',
@@ -281,6 +275,9 @@ const Rows = ({ data, page, setIsDeleted }) => {
               minWidth: '60px',
             }}
           >
+            {/* <button onClick={() => {}} className='Actionbtn editBtn'>
+              <GrView />
+            </button> */}
             <button onClick={deleteOnclick} className='Actionbtn delBtn'>
               <RiDeleteBin6Line />
             </button>

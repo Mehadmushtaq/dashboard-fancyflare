@@ -3,26 +3,27 @@ import Pagination from 'react-js-pagination';
 import Modal from 'react-modal';
 import Header from '../../components/header/Header';
 import { RiDeleteBin6Line } from 'react-icons/ri';
-import { GrView } from 'react-icons/gr';
 import { useLocation, useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
-import { InventoryIcon } from '../../SVGS';
+import { ContactIcon, FaqIcon, PaperIcon } from '../../SVGS';
 import NoDataView from '../../Error/NoDataView';
 import { ErrorCode, ErrorMessages } from '../../constants/ErrorCodes';
 import { PRIMARY } from '../../constants/Colors';
 import ModalComp from '../../components/modal/ModalComp';
-import { deleteProduct, getAllProducts } from '../../api/products';
+import icons_bank from '../../Icons';
+import {
+  deletePhoneSubscriber,
+  getPhoneSubscribers,
+} from '../../api/subscribers';
 
-export default function Products() {
+export default function SubscribersPhone() {
   const icon = () => {
-    return <InventoryIcon width='26' height='30' fill={PRIMARY} />;
+    return <ContactIcon width='26' height='30' fill={PRIMARY} />;
   };
 
   const location = useLocation();
   const CurrPage =
     location.state && location.state ? location.state.page : null;
-
-  const navigate = useNavigate();
 
   const [page, setPage] = useState(CurrPage !== null ? CurrPage : 1);
   const [limit, setLimit] = useState(10);
@@ -55,7 +56,7 @@ export default function Products() {
   const fetchData = (pageNumber, searchTxt) => {
     setErr(false);
     setisLoading(true);
-    getAllProducts()
+    getPhoneSubscribers()
       .then(({ data }) => {
         setisLoading(false);
         if (data.error_code === ErrorCode.success) {
@@ -96,7 +97,7 @@ export default function Products() {
   };
 
   function setIsDeleted(id) {
-    let arr = [...data.filter((item) => item.product.id !== id)];
+    let arr = [...data.filter((item) => item.id !== id)];
     setData([...arr]);
   }
 
@@ -104,31 +105,10 @@ export default function Products() {
     <>
       <div className='mainDashView'>
         <div>
-          <Header svg={icon} DashboardNavText='Products' />
+          <Header svg={icon} DashboardNavText='Subscribers' />
         </div>
 
         <div className='dashPanel border-lt-Gra' style={{ padding: '4% 2%' }}>
-          <div className='r-ViewBar' style={{ padding: 0, margin: 0 }}>
-            <div
-              className='r-ViewBar2'
-              style={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'flex-end',
-              }}
-            >
-              <button
-                className='editPage_btn'
-                style={{ backgroundColor: PRIMARY, color: 'white' }}
-                disabled={isLoading}
-                onClick={() => {
-                  navigate('/dashboard/product/add');
-                }}
-              >
-                Add New Product
-              </button>
-            </div>
-          </div>
           {isLoading ? (
             <LoadingSpinner height={'40px'} width={'40px'} />
           ) : (
@@ -144,17 +124,15 @@ export default function Products() {
                     <table className='roleViewTable'>
                       <thead>
                         <tr>
-                          <th>Image</th>
-                          <th>Name</th>
-                          <th>Price (PKR)</th>
-
+                          {/* <th>Name</th> */}
+                          <th>Phone</th>
                           <th style={{ paddingRight: '20px' }}>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         {data?.map((data) => (
                           <Rows
-                            key={data.product.id}
+                            key={data.id}
                             data={data}
                             page={page}
                             setIsDeleted={(id) => setIsDeleted(id)}
@@ -192,9 +170,10 @@ const Rows = ({ data, page, setIsDeleted }) => {
   const navigate = useNavigate();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [imgErr, setImgErr] = useState(false);
   const [delErr, setdelErr] = useState(false);
   const [errMsg, setErrMsg] = useState('');
-
+  const Icon = icons_bank[data.icon_number - 1];
   const deleteOnclick = () => {
     setModalIsOpen(true);
   };
@@ -202,15 +181,14 @@ const Rows = ({ data, page, setIsDeleted }) => {
   const deleteClick = () => {
     setdelErr(false);
     let obj = {
-      id: data ? data.product.id : null,
+      id: data ? data.id : null,
     };
     setIsLoading(true);
-    deleteProduct(obj)
+    deletePhoneSubscriber(obj)
       .then(({ data }) => {
         setIsLoading(false);
         if (data.error_code === ErrorCode.success) {
           setModalIsOpen(false);
-          console.log(obj?.id);
           setIsDeleted(obj?.id);
         } else if (data.error_code === ErrorCode.failed) {
           setdelErr(true);
@@ -226,27 +204,7 @@ const Rows = ({ data, page, setIsDeleted }) => {
         setIsLoading(false);
       });
   };
-  
-  function editData() {
-    navigate('/dashboard/product/edit', {
-      state: { editData: data },
-    });
-  }
-
-  function viewProduct() {
-    navigate('/dashboard/product/view', {
-      state: { editData: data },
-    });
-  }
-  
-  const calculatePrice = (product) => {
-    if (product.is_discount === 1) {
-      return product.price - (product.price * product.after_discount_price) / 100;
-    } else {
-      return product.price;
-    }
-  };
-  
+  console.log({ data });
 
   return (
     <>
@@ -265,26 +223,9 @@ const Rows = ({ data, page, setIsDeleted }) => {
       />
       {data ? (
         <tr>
-          <td className='break-line-270'>
-            <img
-              style={{
-                width: '4rem',
-                height: 'auto',
-                borderRadius: '0.2rem',
-              }}
-              src={`${process.env.REACT_APP_BASE_URL}${
-                data?.image_product?.find((img) => img.is_main === 1)?.image_url
-              }`}
-            />
-          </td>
-          <td className='break-line-270'>
-            {data?.product?.name?.length > 150
-              ? data?.product?.name.substring(0, 145) + '...'
-              : data?.product?.name}
-          </td>
-          <td className='break-line-270'>
-            {calculatePrice(data?.product)}
-          </td>
+          {/* <td className='break-line-200'>{data?.name}</td> */}
+          <td className='break-line-200'>{data?.phone}</td>
+
           <td
             style={{
               display: 'flex',
@@ -292,12 +233,6 @@ const Rows = ({ data, page, setIsDeleted }) => {
               minWidth: '60px',
             }}
           >
-            <button onClick={viewProduct} className='Actionbtn editBtn'>
-              <GrView />
-            </button>
-            {/* <button onClick={editData} className='Actionbtn delBtn'>
-              <FiEdit />
-            </button> */}
             <button onClick={deleteOnclick} className='Actionbtn delBtn'>
               <RiDeleteBin6Line />
             </button>
