@@ -1,16 +1,24 @@
 import { apiFormDataInstance, apiInstance } from './apiMiddleware';
 
-export const getAllProducts = (page) => {
-  // let params = {};
-  // if (page) params.page = page;
+export const getAllProducts = (limit, page,searchTxt) => {
+  let params = {};
+  if (page) params.page = page;
+  if (limit) params.limit = limit;
+  if (searchTxt) params.search = searchTxt;
+  
   const api = apiInstance();
-  return api.get('api/product/get-all');
+  return api.get('api/product/get-all', {params});
 };
 
 export const postProduct = (data) => {
   if (data.after_discount_price > 0) {
     data.is_discount = 1;
   } else data.is_discount = 0;
+  
+  if(data.isMainProduct){
+    data.isMainProduct = 1;
+  }
+  else data.isMainProduct = 0;
 
   const formData = new FormData();
   formData.append('id', data.id);
@@ -19,9 +27,8 @@ export const postProduct = (data) => {
   formData.append('is_discount', data.is_discount);
   formData.append('after_discount_price', data.after_discount_price);
   formData.append('is_stiched', data.is_stiched);
-  // formData.append('available_stock', data.available_stock);
-  // formData.append('is_main_product', data.is_main_product);
-  // formData.append('color', data.color);
+  formData.append('available_stock', data.available_stock);
+  formData.append('is_main_product', data.isMainProduct);
   formData.append('size', data.size);
   formData.append('image[0][image]', data.images.mainSelected);
   formData.append('image[1][image]', data.images.img2Selected);

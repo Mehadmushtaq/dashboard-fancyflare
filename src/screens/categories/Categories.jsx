@@ -17,6 +17,7 @@ import {
   getAllCategories,
   postCategory,
 } from '../../api/categories';
+import { FiEdit } from 'react-icons/fi';
 
 export default function Subscribers() {
   const icon = () => {
@@ -28,7 +29,7 @@ export default function Subscribers() {
     location.state && location.state ? location.state.page : null;
 
   const [page, setPage] = useState(CurrPage !== null ? CurrPage : 1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(5);
   const [totalRecords, setTotalRecords] = useState(10);
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(false);
@@ -62,7 +63,7 @@ export default function Subscribers() {
   const fetchData = (pageNumber, searchTxt) => {
     setErr(false);
     setisLoading(true);
-    getAllCategories()
+    getAllCategories(limit, pageNumber, searchTxt)
       .then(({ data }) => {
         setisLoading(false);
         if (data.error_code === ErrorCode.success) {
@@ -87,8 +88,8 @@ export default function Subscribers() {
 
   const saveOnclick = () => {
     if (!name.trim()) {
-      settitleErr(true); 
-      return; 
+      settitleErr(true);
+      return;
     }
     setErr(false);
     setisLoading(true);
@@ -141,7 +142,7 @@ export default function Subscribers() {
     <>
       <div className='mainDashView'>
         <div>
-          <Header svg={icon} DashboardNavText='Subscribers' />
+          <Header svg={icon} DashboardNavText='Categories' />
         </div>
 
         <div className='dashPanel border-lt-Gra' style={{ padding: '4% 2%' }}>
@@ -196,7 +197,7 @@ export default function Subscribers() {
                     <table className='roleViewTable'>
                       <thead>
                         <tr>
-                          <th>Name</th>
+                          <th style={{width:"50%"}}>Name</th>
                           <th style={{ paddingRight: '20px' }}>Actions</th>
                         </tr>
                       </thead>
@@ -242,6 +243,8 @@ const Rows = ({ data, page, setIsDeleted }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [delErr, setdelErr] = useState(false);
   const [errMsg, setErrMsg] = useState('');
+  const navigate = useNavigate();
+
   const deleteOnclick = () => {
     setModalIsOpen(true);
   };
@@ -273,6 +276,12 @@ const Rows = ({ data, page, setIsDeleted }) => {
       });
   };
 
+  function editData() {
+    navigate('/dashboard/category/edit', {
+      state: { editData: data },
+    });
+  }
+
   return (
     <>
       <ModalComp
@@ -300,9 +309,15 @@ const Rows = ({ data, page, setIsDeleted }) => {
             }}
           >
             {data.id > 5 && (
-              <button onClick={deleteOnclick} className='Actionbtn delBtn'>
-                <RiDeleteBin6Line />
-              </button>
+              <>
+                <button onClick={editData} className='Actionbtn editBtn'>
+                  <FiEdit />
+                </button>
+
+                <button onClick={deleteOnclick} className='Actionbtn delBtn'>
+                  <RiDeleteBin6Line />
+                </button>
+              </>
             )}
           </td>
         </tr>

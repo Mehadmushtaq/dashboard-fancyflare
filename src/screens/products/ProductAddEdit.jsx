@@ -43,7 +43,8 @@ export default function ProductAddEdit({ isEdit, isView }) {
   const [displayVariants, setDisplayVariants] = useState(false);
   const [showSize, setShowSize] = useState(true);
   
-  // const [isMainProduct, setIsMainProduct] = useState(false);
+  const [isMainProduct, setIsMainProduct] = useState(false);
+
   const [newData, setNewData] = useState({
     id: prevData ? prevData.product?.id : 0,
     name: prevData ? prevData.product?.name : '',
@@ -52,9 +53,7 @@ export default function ProductAddEdit({ isEdit, isView }) {
     size: prevData ? prevData.product?.size : '',
     is_stiched: prevData ? prevData.product?.is_stiched : "",
     category_id : prevData ? prevData.product?.category_id : "",   
-
-    //inventory
-    // available_stock: prevData ? prevData?.product?.available_stock : 0,
+    available_stock: prevData ? prevData?.product?.available_stock : 0,
   });
 
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -69,7 +68,7 @@ export default function ProductAddEdit({ isEdit, isView }) {
       fileRef.current.click();
     }
   };
-
+  
   const [productColor1, setProductColor1] = useState({
     color: prevData ? prevData?.product_color[0]?.color : '',
     small_size_quantity: prevData
@@ -125,11 +124,14 @@ export default function ProductAddEdit({ isEdit, isView }) {
       : 0,
   });
 
-  // useEffect(() => {
-  //   if (prevData && prevData?.product?.is_main_product === 1)
-  //     setIsMainProduct(true);
-  //   else setIsMainProduct(false);
-  // }, []);
+  useEffect(() => {
+    if (prevData && prevData?.product?.is_main_product === 1)
+    {
+      console.log('main product h');
+      setIsMainProduct(true);
+    }
+    else setIsMainProduct(false);
+  }, []);
 
   useEffect(() => {
     getAllCategories().then((res) => {
@@ -153,7 +155,7 @@ export default function ProductAddEdit({ isEdit, isView }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
+    
     if (name === 'is_stiched') {
       const isStichedValue = parseInt(value);
       const newSize = isStichedValue === 1 ? 'wide-range' : '';
@@ -185,6 +187,10 @@ export default function ProductAddEdit({ isEdit, isView }) {
     const { name, value } = e.target;
     setProductColor2({ ...productColor2, [name]: value });
   };
+  
+  const handleCheckboxChange = () => {
+    setIsMainProduct(!isMainProduct);
+  };
 
   const saveOnclick = () => {
     if (!newData.name) setNameErr(true);
@@ -196,15 +202,11 @@ export default function ProductAddEdit({ isEdit, isView }) {
       setErr(true);
       setErrMsg('Select category');
     } else {
-      // if (isMainProduct) {
-      //   is_main_product = 1;
-      // }
-
       setErr(false);
       setIsLoading(true);
       postProduct({
         ...newData,
-        // is_main_product,
+        isMainProduct,
         images: { mainSelected, img2Selected, img3Selected },
         productColor1,
         productColor2,
@@ -395,7 +397,7 @@ export default function ProductAddEdit({ isEdit, isView }) {
                       </div>
                     </div>
 
-                    <h3>Pricing</h3>
+                    {/* <h3>Pricing</h3> */}
                     <div className='ae-formFields'>
                       <div className='ae-inputField'>
                         <InputField
@@ -427,6 +429,24 @@ export default function ProductAddEdit({ isEdit, isView }) {
                           width='19vw'
                           disable={isView}
                         />
+                      </div>
+                      <div 
+                      style={{
+                        padding:"1rem 0",
+                        display:"flex",
+                        alignItems:'center'
+                      }}>
+                        <input
+                          type='checkbox'
+                          value={isMainProduct}
+                          onChange={
+                            handleCheckboxChange
+                          }
+                          disabled={isView}
+                          />
+                          <p style={{
+                            padding:"1rem 0.5rem"
+                          }}>Make this product main product</p>
                       </div>
                     </div>
                   </div>
@@ -849,10 +869,11 @@ export default function ProductAddEdit({ isEdit, isView }) {
                       <div className='ae-inputField'>
                         <InputField
                           type='number'
-                          // value={newData?.available_stock}
-                          // onChange={(e) => {
-                          //   handleChange(e);
-                          // }}
+                          name={'available_stock'}
+                          value={newData?.available_stock}
+                          onChange={(e) => {
+                            handleChange(e);
+                          }}
                           placeholder={'Available Stock'}
                           radius='7px'
                           width='50px'

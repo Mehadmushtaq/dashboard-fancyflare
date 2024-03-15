@@ -15,7 +15,12 @@ export const deleteCategory = (data) => {
   return api.post('/api/category/delete', data);
 };
 
-export const getAllCategories = () => {
+export const getAllCategories = (limit, page, search) => {
+  let params = {};
+  if (page) params.page = page;
+  if(limit) params.limit = limit;
+  if (search) params.search = search;
+
   const api = apiInstance();
-  return api.get('api/category/get-all');
+  return api.get('api/category/get-all',{params});
 };

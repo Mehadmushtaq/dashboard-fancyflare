@@ -9,6 +9,7 @@ import { HiOutlineExclamationCircle } from 'react-icons/hi2';
 export default function SimpleModal({
   isVisible,
   setIsVisible = () => {},
+  isDisabled = false,
   isErr = false,
   isCaution = false,
   isLoading = false,
@@ -68,7 +69,7 @@ export default function SimpleModal({
         >
           {msg}
         </h5>
-        <button onClick={onClick} className='delete_btn'>
+        <button disabled={isDisabled} onClick={onClick} className='delete_btn'>
           {isLoading ? <LoadingSpinner /> : 'Delete'}
         </button>
       </div>

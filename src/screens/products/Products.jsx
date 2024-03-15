@@ -25,7 +25,7 @@ export default function Products() {
   const navigate = useNavigate();
 
   const [page, setPage] = useState(CurrPage !== null ? CurrPage : 1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(5);
   const [totalRecords, setTotalRecords] = useState(10);
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(false);
@@ -55,11 +55,12 @@ export default function Products() {
   const fetchData = (pageNumber, searchTxt) => {
     setErr(false);
     setisLoading(true);
-    getAllProducts()
+    getAllProducts(limit, pageNumber, searchTxt)
       .then(({ data }) => {
         setisLoading(false);
         if (data.error_code === ErrorCode.success) {
           setData(data.result);
+          setPage(pageNumber);
         } else if (data.error_code === ErrorCode.not_exist) {
           setData([]);
           setErrorMsg('No data found');
@@ -96,8 +97,9 @@ export default function Products() {
   };
 
   function setIsDeleted(id) {
-    let arr = [...data.filter((item) => item.product.id !== id)];
-    setData([...arr]);
+    // let arr = [...data.filter((item) => item.product.id !== id)];
+    // setData([...arr]);
+    fetchData(page);
   }
 
   return (
@@ -108,15 +110,25 @@ export default function Products() {
         </div>
 
         <div className='dashPanel border-lt-Gra' style={{ padding: '4% 2%' }}>
-          <div className='r-ViewBar' style={{ padding: 0, margin: 0 }}>
+          <div className='r-ViewBar'>
             <div
               className='r-ViewBar2'
               style={{
                 width: '100%',
                 display: 'flex',
-                justifyContent: 'flex-end',
+                justifyContent: 'space-between',
               }}
             >
+              <div>
+                <input
+                  type='search'
+                  value={searchString}
+                  onChange={handleSearch}
+                  placeholder='Search'
+                  className='rolesSearch'
+                />
+              </div>
+
               <button
                 className='editPage_btn'
                 style={{ backgroundColor: PRIMARY, color: 'white' }}
@@ -129,6 +141,7 @@ export default function Products() {
               </button>
             </div>
           </div>
+
           {isLoading ? (
             <LoadingSpinner height={'40px'} width={'40px'} />
           ) : (
@@ -146,6 +159,7 @@ export default function Products() {
                         <tr>
                           <th>Image</th>
                           <th>Name</th>
+                          <th>Category</th>
                           <th>Price (PKR)</th>
 
                           <th style={{ paddingRight: '20px' }}>Actions</th>
@@ -210,7 +224,6 @@ const Rows = ({ data, page, setIsDeleted }) => {
         setIsLoading(false);
         if (data.error_code === ErrorCode.success) {
           setModalIsOpen(false);
-          console.log(obj?.id);
           setIsDeleted(obj?.id);
         } else if (data.error_code === ErrorCode.failed) {
           setdelErr(true);
@@ -226,7 +239,7 @@ const Rows = ({ data, page, setIsDeleted }) => {
         setIsLoading(false);
       });
   };
-  
+
   function editData() {
     navigate('/dashboard/product/edit', {
       state: { editData: data },
@@ -238,15 +251,18 @@ const Rows = ({ data, page, setIsDeleted }) => {
       state: { editData: data },
     });
   }
-  
+
   const calculatePrice = (product) => {
+    let price = product.price;
+
     if (product.is_discount === 1) {
-      return product.price - (product.price * product.after_discount_price) / 100;
-    } else {
-      return product.price;
+      const discountAmount =
+        (product.price * product.after_discount_price) / 100;
+      price -= discountAmount;
     }
+
+    return Math.floor(price);
   };
-  
 
   return (
     <>
@@ -260,7 +276,8 @@ const Rows = ({ data, page, setIsDeleted }) => {
         isErr={delErr}
         errMsg={errMsg}
         onClick={deleteClick}
-        isLoading={isLoading}
+        isDisabled={isLoading}
+        // isLoading={isLoading}
         msg={'Are you sure you want to delete?'}
       />
       {data ? (
@@ -278,13 +295,14 @@ const Rows = ({ data, page, setIsDeleted }) => {
             />
           </td>
           <td className='break-line-270'>
-            {data?.product?.name?.length > 150
-              ? data?.product?.name.substring(0, 145) + '...'
+            {data?.product?.name?.length > 100
+              ? data?.product?.name.substring(0, 100) + '...'
               : data?.product?.name}
           </td>
           <td className='break-line-270'>
-            {calculatePrice(data?.product)}
+            {data?.product?.category_name}
           </td>
+          <td className='break-line-270'>{calculatePrice(data?.product)}</td>
           <td
             style={{
               display: 'flex',

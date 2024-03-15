@@ -16,6 +16,7 @@ import Categories from './screens/categories/Categories.jsx';
 import SubscribersPhone from './screens/subscribers-phone/SubscribersPhone.jsx';
 import Products from './screens/products/Products.jsx';
 import ProductAddEdit from './screens/products/ProductAddEdit.jsx';
+import CategoryAddEdit from './screens/categories/CategoryAddEdit.jsx';
 
 function App() {
   const Dashboard = () => {
@@ -74,6 +75,8 @@ function App() {
 
             <Route path='/dashboard/hero-images' element={<HeroImages />} />
             <Route path='/dashboard/categories' element={<Categories />} />
+            <Route path='/dashboard/category/edit' element={<CategoryAddEdit isEdit/>} />
+            
           </Route>
         </Routes>
       </BrowserRouter>

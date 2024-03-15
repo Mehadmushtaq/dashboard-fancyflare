@@ -26,7 +26,7 @@ export default function Subscribers() {
     location.state && location.state ? location.state.page : null;
 
   const [page, setPage] = useState(CurrPage !== null ? CurrPage : 1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(5);
   const [totalRecords, setTotalRecords] = useState(10);
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(false);
@@ -53,14 +53,15 @@ export default function Subscribers() {
     };
   }, [searchString]);
 
-  const fetchData = (pageNumber, searchTxt) => {
+  const fetchData = (pageNumber, searchTxt)=> {
     setErr(false);
     setisLoading(true);
-    getEmailSubscribers()
+    getEmailSubscribers(limit, pageNumber, searchTxt)
       .then(({ data }) => {
         setisLoading(false);
         if (data.error_code === ErrorCode.success) {
           setData(data.result);
+          setPage(pageNumber);
         } else if (data.error_code === ErrorCode.not_exist) {
           setData([]);
           setErrorMsg('No data found');
@@ -97,8 +98,9 @@ export default function Subscribers() {
   };
 
   function setIsDeleted(id) {
-    let arr = [...data.filter((item) => item.id !== id)];
-    setData([...arr]);
+    // let arr = [...data.filter((item) => item.id !== id)];
+    // setData([...arr]);
+    fetchData(page);
   }
 
   return (
@@ -109,6 +111,25 @@ export default function Subscribers() {
         </div>
 
         <div className='dashPanel border-lt-Gra' style={{ padding: '4% 2%' }}>
+        <div className='r-ViewBar'>
+            <div
+              className='r-ViewBar2'
+              style={{
+                width: '100%',
+              }}
+            >
+              <div>
+                <input
+                  type='search'
+                  value={searchString}
+                  onChange={handleSearch}
+                  placeholder='Search'
+                  className='rolesSearch'
+                />
+              </div>
+            </div>
+          </div>
+
           {isLoading ? (
             <LoadingSpinner height={'40px'} width={'40px'} />
           ) : (
@@ -126,6 +147,7 @@ export default function Subscribers() {
                         <tr>
                           {/* <th>Name</th> */}
                           <th>Email</th>
+                          <th>Subscribed At</th>
                           <th style={{ paddingRight: '20px' }}>Actions</th>
                         </tr>
                       </thead>
@@ -217,13 +239,14 @@ const Rows = ({ data, page, setIsDeleted }) => {
         isErr={delErr}
         errMsg={errMsg}
         onClick={deleteClick}
-        isLoading={isLoading}
+        isDisabled={isLoading}
+        // isLoading={isLoading}
         msg={'Are you sure you want to delete?'}
       />
       {data ? (
         <tr>
-          {/* <td className='break-line-200'>{data?.name}</td> */}
           <td className='break-line-200'>{data?.email}</td>
+          <td className='break-line-200'>{data?.createdAt.split('T')[0]}</td>
 
           <td
             style={{

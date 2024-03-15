@@ -23,7 +23,7 @@ export default function Reviews() {
     location.state && location.state ? location.state.page : null;
 
   const [page, setPage] = useState(CurrPage !== null ? CurrPage : 1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(5);
   const [totalRecords, setTotalRecords] = useState(10);
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(false);
@@ -58,6 +58,7 @@ export default function Reviews() {
         setisLoading(false);
         if (data.error_code === ErrorCode.success) {
           setData(data.result);
+          setPage(pageNumber);
         } else if (data.error_code === ErrorCode.not_exist) {
           setData([]);
           setErrorMsg('No data found');
@@ -94,8 +95,9 @@ export default function Reviews() {
   };
 
   function setIsDeleted(id) {
-    let arr = [...data.filter((item) => item.id !== id)];
-    setData([...arr]);
+    // let arr = [...data.filter((item) => item.id !== id)];
+    // setData([...arr]);
+    fetchData(page);
   }
 
   return (
@@ -135,7 +137,9 @@ export default function Reviews() {
                       <thead>
                         <tr>
                           <th>Ratings</th>
+                          <th>Product</th>
                           <th>Message</th>
+                          <th>category</th>
                           <th style={{ paddingRight: '20px' }}>Actions</th>
                         </tr>
                       </thead>
@@ -231,17 +235,25 @@ const Rows = ({ data, page, setIsDeleted }) => {
         isErr={delErr}
         errMsg={errMsg}
         onClick={deleteClick}
-        isLoading={isLoading}
+        isDisabled={isLoading}
+        // isLoading={isLoading}
         msg={'Are you sure you want to delete?'}
       />
       {data ? (
         <tr>
           <td className='break-line-170'>{data.star}</td>
           <td className='break-line-170'>
+            {data?.produuct_name || 'Product'}
+          </td>
+          <td className='break-line-170'>
             {data.review.length > 30
               ? data.review.substring(0, 30) + '...'
               : data.review}
           </td>
+          <td className='break-line-170'>
+            {data?.category_name || 'Category'}
+          </td>
+          
           <td
             style={{
               display: 'flex',

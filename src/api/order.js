@@ -1,11 +1,12 @@
 import { apiInstance } from './apiMiddleware';
 
-export const getAllOrders = (page, search) => {
-  // let params = {};
-  // if (page) params.page = page;
-  // if (search) params.search = search;
+export const getAllOrders = (limit, page, search) => {
+  let params = {};
+  if (page) params.page = page;
+  if(limit) params.limit = limit;
+  if (search) params.search = search;
   const api = apiInstance();
-  return api.get('api/checkout/get-all');
+  return api.get('api/checkout/get-all',{params});
 };
 
 export const postOrder = (data) => {

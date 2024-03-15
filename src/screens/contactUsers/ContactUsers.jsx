@@ -25,7 +25,7 @@ export default function ContactUsers() {
   const navigate = useNavigate();
 
   const [page, setPage] = useState(CurrPage !== null ? CurrPage : 1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(5);
   const [totalRecords, setTotalRecords] = useState(10);
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(false);
@@ -60,6 +60,7 @@ export default function ContactUsers() {
         setisLoading(false);
         if (data.error_code === ErrorCode.success) {
           setData(data.result);
+          setPage(pageNumber);
         } else if (data.error_code === ErrorCode.not_exist) {
           setData([]);
           setErrorMsg('No data found');
@@ -96,8 +97,9 @@ export default function ContactUsers() {
   };
 
   function setIsDeleted(id) {
-    let arr = [...data.filter((item) => item.id !== id)];
-    setData([...arr]);
+    // let arr = [...data.filter((item) => item.id !== id)];
+    // setData([...arr]);
+    fetchData(page);
   }
 
   return (
@@ -258,7 +260,8 @@ const Rows = ({ data, page, setIsDeleted }) => {
         isErr={delErr}
         errMsg={errMsg}
         onClick={deleteClick}
-        isLoading={isLoading}
+        isDisabled={isLoading}
+        // isLoading={isLoading}
         msg={'Are you sure you want to delete?'}
       />
       {data ? (

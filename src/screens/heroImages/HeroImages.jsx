@@ -35,7 +35,7 @@ export default function HeroImages() {
   const [searchString, setSearchString] = useState('');
 
   const [selectedFile, setSelectedFile] = useState('');
-  const [selectedImg, setSelectedImg]=useState('');
+  const [selectedImg, setSelectedImg] = useState('');
   const fileInputRef = useRef(null);
 
   const handleImageUploadClick = () => {
@@ -78,6 +78,7 @@ export default function HeroImages() {
         setisLoading(false);
         if (data.error_code === ErrorCode.success) {
           setData(data.result);
+          setPage(pageNumber);
         } else if (data.error_code === ErrorCode.not_exist) {
           setData([]);
           setErrorMsg('No data found');
@@ -188,12 +189,12 @@ export default function HeroImages() {
                       backgroundImage: `url(${selectedImg})`,
                       backgroundPosition: 'center center',
                       backgroundSize: 'cover',
-                      position:"relative",
+                      position: 'relative',
                     }}
                   >
-                  {!selectedImg && "Select Image to upload"}
+                    {!selectedImg && 'Select Image to upload'}
                   </div>
-                  
+
                   {selectedImg && (
                     <div
                       style={{
@@ -201,7 +202,7 @@ export default function HeroImages() {
                         marginTop: '20px',
                       }}
                     >
-                     Click to change
+                      Click to change
                     </div>
                   )}
 
@@ -210,7 +211,7 @@ export default function HeroImages() {
                     style={{
                       marginTop: '20px',
                     }}
-                    disabled={!selectedImg|| data.length >= 5}
+                    disabled={!selectedImg || data.length >= 5}
                     onClick={saveOnclick}
                   >
                     Upload
@@ -314,9 +315,9 @@ const Rows = ({ data, page, setIsDeleted }) => {
         <tr>
           <td className='break-line-200'>
             <img
-              src={`${process.env.REACT_APP_BASE_URL}${data?.image_url}`}
               height='100rem'
               width='175rem'
+              src={`${process.env.REACT_APP_BASE_URL}${data?.image_url}`}
             />
           </td>
           <td

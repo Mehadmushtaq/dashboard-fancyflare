@@ -1,8 +1,13 @@
 import { apiInstance } from './apiMiddleware';
 
-export const getEmailSubscribers = () => {
+export const getEmailSubscribers = (limit, page, search) => {
+  let params = {};
+  if (page) params.page = page;
+  if (limit) params.limit = limit;
+  if (search) params.search = search;
+
   const api = apiInstance();
-  return api.get('api/subscribers/get-all?page=1&limit=10');
+  return api.get('api/subscribers/get-all', { params });
 };
 
 export const deleteEmailSubscriber = (data) => {
@@ -10,9 +15,14 @@ export const deleteEmailSubscriber = (data) => {
   return api.post('/api/subscribers/delete', data);
 };
 
-export const getPhoneSubscribers = () => {
+export const getPhoneSubscribers = (limit, page, search) => {
+  let params = {};
+  if (page) params.page = page;
+  if (limit) params.limit = limit;
+  if (search) params.search = search;
+
   const api = apiInstance();
-  return api.get('api/subscribers-phone/get-all?page=1&limit=10');
+  return api.get('api/subscribers-phone/get-all', { params });
 };
 
 export const deletePhoneSubscriber = (data) => {

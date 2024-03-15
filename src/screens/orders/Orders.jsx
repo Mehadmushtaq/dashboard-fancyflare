@@ -12,7 +12,6 @@ import { ErrorCode, ErrorMessages } from '../../constants/ErrorCodes';
 import { PRIMARY } from '../../constants/Colors';
 import ModalComp from '../../components/modal/ModalComp';
 import { deleteOrder, getAllOrders } from '../../api/order';
-import { GrView } from 'react-icons/gr';
 
 export default function Orders() {
   const icon = () => {
@@ -26,7 +25,7 @@ export default function Orders() {
   const navigate = useNavigate();
 
   const [page, setPage] = useState(CurrPage !== null ? CurrPage : 1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(5);
   const [totalRecords, setTotalRecords] = useState(10);
   const [data, setData] = useState([]);
   const [isLoading, setisLoading] = useState(false);
@@ -43,7 +42,7 @@ export default function Orders() {
     fetchData(page);
     Modal.setAppElement('#root');
   }, []);
-
+  
   useEffect(() => {
     const delay = setTimeout(() => {
       if (searchString.trim() !== '') fetchData(page, searchString);
@@ -56,11 +55,12 @@ export default function Orders() {
   const fetchData = (pageNumber, searchTxt) => {
     setErr(false);
     setisLoading(true);
-    getAllOrders(null, searchTxt)
+    getAllOrders(limit, pageNumber, searchTxt)
       .then(({ data }) => {
         setisLoading(false);
         if (data.error_code === ErrorCode.success) {
           setData(data.result);
+          setPage(pageNumber);
         } else if (data.error_code === ErrorCode.not_exist) {
           setData([]);
           setErrorMsg('No data found');
@@ -97,8 +97,9 @@ export default function Orders() {
   };
 
   function setIsDeleted(id) {
-    let arr = [...data.filter((item) => item.id !== id)];
-    setData([...arr]);
+    // let arr = [...data.filter((item) => item.id !== id)];
+    // setData([...arr]);
+    fetchData(page);
   }
 
   return (
@@ -243,7 +244,8 @@ const Rows = ({ data, page, setIsDeleted }) => {
         isErr={delErr}
         errMsg={errMsg}
         onClick={deleteClick}
-        isLoading={isLoading}
+        isDisabled={isLoading}
+        // isLoading={isLoading}
         msg={'Are you sure you want to delete?'}
       />
       {data ? (
