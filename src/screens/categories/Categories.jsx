@@ -68,6 +68,8 @@ export default function Subscribers() {
         setisLoading(false);
         if (data.error_code === ErrorCode.success) {
           setData(data.result);
+          setPage(pageNumber)
+          setTotalRecords(data?.total_records);
         } else if (data.error_code === ErrorCode.not_exist) {
           setData([]);
           setErrorMsg('No data found');
@@ -95,7 +97,6 @@ export default function Subscribers() {
     setisLoading(true);
     postCategory({ name })
       .then(({ data }) => {
-        console.log('postcategory', data);
         setisLoading(false);
         if (
           data.error_code === ErrorCode.success ||
@@ -221,7 +222,7 @@ export default function Subscribers() {
                       activePage={page}
                       itemsCountPerPage={limit}
                       totalItemsCount={totalRecords}
-                      pageRangeDisplayed={3}
+                      pageRangeDisplayed={5}
                       onChange={(pageNumber) => {
                         handlePageChange(pageNumber);
                       }}

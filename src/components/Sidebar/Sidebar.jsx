@@ -34,7 +34,7 @@ function Sidebar() {
       <div className='sidebar_main'>
         <div className='logo'>
           <img
-            style={{ height: '100px', width: 'auto' }}
+            style={{ height: 'auto', width: '100%' }}
             src={Logo}
             alt='logo'
           />

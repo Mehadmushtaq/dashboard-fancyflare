@@ -33,7 +33,7 @@ export default function SubscribersPhone() {
   const [errorMsg, setErrorMsg] = useState('');
   const [paginationDisplay, setPaginationDisplay] = useState('block');
   const [err, setErr] = useState(false);
-  const [searchString, setSearchString] = useState('');
+  // const [searchString, setSearchString] = useState('');
 
   useEffect(() => {
     window.scrollTo({
@@ -44,14 +44,14 @@ export default function SubscribersPhone() {
     Modal.setAppElement('#root');
   }, []);
 
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      if (searchString.trim() !== '') fetchData(page, searchString);
-    }, 1500);
-    return () => {
-      clearTimeout(delay);
-    };
-  }, [searchString]);
+  // useEffect(() => {
+  //   const delay = setTimeout(() => {
+  //     if (searchString.trim() !== '') fetchData(page, searchString);
+  //   }, 1500);
+  //   return () => {
+  //     clearTimeout(delay);
+  //   };
+  // }, [searchString]);
 
   const fetchData = (pageNumber, searchTxt) => {
     setErr(false);
@@ -61,6 +61,8 @@ export default function SubscribersPhone() {
         setisLoading(false);
         if (data.error_code === ErrorCode.success) {
           setData(data.result);
+          setPage(pageNumber)
+          setTotalRecords(data?.total_records);
         } else if (data.error_code === ErrorCode.not_exist) {
           setData([]);
           setErrorMsg('No data found');
@@ -85,16 +87,16 @@ export default function SubscribersPhone() {
       behavior: 'smooth',
     });
     if (pageNumber >= 1) {
-      fetchData(pageNumber, searchString);
+      fetchData(pageNumber);
     }
   };
 
-  const handleSearch = (e) => {
-    setSearchString(e.target.value);
-    if (e.target.value === '') {
-      fetchData(page);
-    }
-  };
+  // const handleSearch = (e) => {
+  //   setSearchString(e.target.value);
+  //   if (e.target.value === '') {
+  //     fetchData(page);
+  //   }
+  // };
 
   function setIsDeleted(id) {
     // let arr = [...data.filter((item) => item.id !== id)];
@@ -110,7 +112,7 @@ export default function SubscribersPhone() {
         </div>
 
         <div className='dashPanel border-lt-Gra' style={{ padding: '4% 2%' }}>
-          <div className='r-ViewBar'>
+          {/* <div className='r-ViewBar'>
             <div
               className='r-ViewBar2'
               style={{
@@ -127,7 +129,7 @@ export default function SubscribersPhone() {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
 
           {isLoading ? (
             <LoadingSpinner height={'40px'} width={'40px'} />
@@ -224,7 +226,6 @@ const Rows = ({ data, page, setIsDeleted }) => {
         setIsLoading(false);
       });
   };
-  console.log({ data });
 
   return (
     <>

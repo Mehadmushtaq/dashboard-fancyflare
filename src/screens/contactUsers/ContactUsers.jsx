@@ -61,6 +61,7 @@ export default function ContactUsers() {
         if (data.error_code === ErrorCode.success) {
           setData(data.result);
           setPage(pageNumber);
+          setTotalRecords(data?.total_records);
         } else if (data.error_code === ErrorCode.not_exist) {
           setData([]);
           setErrorMsg('No data found');

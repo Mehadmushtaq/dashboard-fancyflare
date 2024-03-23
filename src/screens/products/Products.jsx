@@ -12,6 +12,7 @@ import { ErrorCode, ErrorMessages } from '../../constants/ErrorCodes';
 import { PRIMARY } from '../../constants/Colors';
 import ModalComp from '../../components/modal/ModalComp';
 import { deleteProduct, getAllProducts } from '../../api/products';
+import { FiEdit } from 'react-icons/fi';
 
 export default function Products() {
   const icon = () => {
@@ -61,6 +62,7 @@ export default function Products() {
         if (data.error_code === ErrorCode.success) {
           setData(data.result);
           setPage(pageNumber);
+          setTotalRecords(data?.total_records);
         } else if (data.error_code === ErrorCode.not_exist) {
           setData([]);
           setErrorMsg('No data found');
@@ -185,7 +187,7 @@ export default function Products() {
                       activePage={page}
                       itemsCountPerPage={limit}
                       totalItemsCount={totalRecords}
-                      pageRangeDisplayed={3}
+                      pageRangeDisplayed={5}
                       onChange={(pageNumber) => {
                         handlePageChange(pageNumber);
                       }}
@@ -299,26 +301,30 @@ const Rows = ({ data, page, setIsDeleted }) => {
               ? data?.product?.name.substring(0, 100) + '...'
               : data?.product?.name}
           </td>
-          <td className='break-line-270'>
-            {data?.product?.category_name}
-          </td>
+          <td className='break-line-270'>{data?.product?.category_name}</td>
           <td className='break-line-270'>{calculatePrice(data?.product)}</td>
           <td
             style={{
-              display: 'flex',
-              justifyContent: 'center',
-              minWidth: '60px',
+              textAlign: 'center', 
+              verticalAlign: 'middle',
             }}
           >
-            <button onClick={viewProduct} className='Actionbtn editBtn'>
-              <GrView />
-            </button>
-            {/* <button onClick={editData} className='Actionbtn delBtn'>
-              <FiEdit />
-            </button> */}
-            <button onClick={deleteOnclick} className='Actionbtn delBtn'>
-              <RiDeleteBin6Line />
-            </button>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <button onClick={viewProduct} className='Actionbtn editBtn'>
+                <GrView />
+              </button>
+              <button onClick={editData} className='Actionbtn editBtn'>
+                <FiEdit />
+              </button>
+              <button onClick={deleteOnclick} className='Actionbtn delBtn'>
+                <RiDeleteBin6Line />
+              </button>
+            </div>
           </td>
         </tr>
       ) : null}

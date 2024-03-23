@@ -198,7 +198,7 @@ export default function HeroImages() {
                   {selectedImg && (
                     <div
                       style={{
-                        color: 'red',
+                        color: 'blue',
                         marginTop: '20px',
                       }}
                     >
@@ -223,7 +223,7 @@ export default function HeroImages() {
                     <div
                       style={{
                         overflowY: 'scroll',
-                        maxHeight: '70vh',
+                        maxHeight: '50vh',
                       }}
                     >
                       <div className='tableContainer'>

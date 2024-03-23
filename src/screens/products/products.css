@@ -24,7 +24,6 @@
 }
 .description_text {
   padding: 20px 12px;
-  /* height: 20px; */
   min-width: 200px;
   width: 400px;
   background-color: white;
@@ -58,8 +57,7 @@
 }
 .ae-formFields {
   display: flex;
-  margin-bottom: 16px;
-  /* justify-content: space-between; */
+  margin-bottom: 0.5rem;
 }
 
 .ae-selectField {
@@ -159,7 +157,7 @@ input[type='checkbox'] {
 
 .product-leftpanel{
   background-color: #f6f6f6;
-  padding: 1.5rem 2rem 0rem 1.5rem;
+  padding: 1.5rem 2rem 0.5rem 1.5rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem; 
 }

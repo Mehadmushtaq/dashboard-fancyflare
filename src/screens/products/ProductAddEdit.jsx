@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './products.css';
 import { useLocation, useNavigate } from 'react-router-dom';
-import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import InputField from '../../components/InputField/InputField';
 import 'animate.css';
 import Header from '../../components/header/Header';
@@ -21,29 +20,19 @@ export default function ProductAddEdit({ isEdit, isView }) {
   const prevData =
     location.state && location.state ? location.state.editData : null;
   const page = location.state && location.state ? location.state.page : null;
-  
+
   const [categories, setCategories] = useState([]);
 
   //validation
   const [isLoading, setIsLoading] = useState(false);
   const [nameErr, setNameErr] = useState(false);
   const [priceErr, setPriceErr] = useState(false);
+  const [stockErr, setStockErr] = useState(false);
   const [err, setErr] = useState(false);
   const [errMsg, setErrMsg] = useState('');
 
-  const [mainImage, setMainImage] = useState(null);
-  const [image2, setImage2] = useState(null);
-  const [image3, setImage3] = useState(null);
-  const [showImage, setShowImage] = useState(false);
-  
-  const [mainSelected, setMainSelected] = useState('');
-  const [img2Selected, setImg2Selected] = useState('');
-  const [img3Selected, setImg3Selected] = useState('');
-  
   const [displayVariants, setDisplayVariants] = useState(false);
   const [showSize, setShowSize] = useState(true);
-  
-  const [isMainProduct, setIsMainProduct] = useState(false);
 
   const [newData, setNewData] = useState({
     id: prevData ? prevData.product?.id : 0,
@@ -51,86 +40,77 @@ export default function ProductAddEdit({ isEdit, isView }) {
     price: prevData ? prevData.product?.price : 0,
     after_discount_price: prevData ? prevData.product?.after_discount_price : 0,
     size: prevData ? prevData.product?.size : '',
-    is_stiched: prevData ? prevData.product?.is_stiched : "",
-    category_id : prevData ? prevData.product?.category_id : "",   
+    is_stiched: prevData ? prevData.product?.is_stiched : '',
+    category_id: prevData ? prevData.product?.category_id : '',
     available_stock: prevData ? prevData?.product?.available_stock : 0,
+    is_main_product: prevData ? !!prevData?.product?.is_main_product : false, //convert to boolean !!1 = True and !!0 = False
   });
 
+  const [selectedImages, setSelectedImages] = useState([null, null, null]);
+  const [prevImageUrls, setPrevImageUrls] = useState([]);
+  const [changedImageIds, setChangedImageIds] = useState([]);
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const [productColors, setProductColors] = useState([]);
 
-  //in use
-  const fileInputRef1 = useRef(null);
-  const fileInputRef2 = useRef(null);
-  const fileInputRef3 = useRef(null);
-
-  const handleImageUploadClick = (fileRef) => {
-    if (fileRef.current) {
-      fileRef.current.click();
+  const handlenewChange = (index, e) => {
+    const { name, value } = e.target;
+    // console.log(name, value);
+    if (name === 'color') {
+      setProductColors((prevColors) => {
+        const updatedColors = [...prevColors];
+        updatedColors[index] = {
+          ...updatedColors[index],
+          color: value,
+        };
+        return updatedColors;
+      });
+    } else {
+      setProductColors((prevColors) => {
+        const updatedColors = [...prevColors];
+        updatedColors[index] = {
+          ...updatedColors[index],
+          sizes: {
+            ...updatedColors[index].sizes,
+            [name]: value,
+          },
+        };
+        return updatedColors;
+      });
     }
   };
-  
-  const [productColor1, setProductColor1] = useState({
-    color: prevData ? prevData?.product_color[0]?.color : '',
-    small_size_quantity: prevData
-      ? prevData?.product_color[0]?.small_size_quantity
-      : 0,
-    small_size_price: prevData
-      ? prevData?.product_color[0]?.small_size_price
-      : 0,
-    medium_size_quantity: prevData
-      ? prevData?.product_color[0]?.medium_size_quantity
-      : 0,
-    medium_size_price: prevData
-      ? prevData?.product_color[0]?.medium_size_price
-      : 0,
-    large_size_quantity: prevData
-      ? prevData?.product_color[0]?.large_size_quantity
-      : 0,
-    large_size_price: prevData
-      ? prevData?.product_color[0]?.large_size_price
-      : 0,
-    extra_large_size_quantity: prevData
-      ? prevData?.product_color[0]?.extra_large_size_quantity
-      : 0,
-    extra_large_size_price: prevData
-      ? prevData?.product_color[0]?.extra_large_size_price
-      : 0,
-  });
-  const [productColor2, setProductColor2] = useState({
-    color: prevData ? prevData?.product_color[1]?.color : '',
-    small_size_quantity: prevData
-      ? prevData?.product_color[1]?.small_size_quantity
-      : 0,
-    small_size_price: prevData
-      ? prevData?.product_color[1]?.small_size_price
-      : 0,
-    medium_size_quantity: prevData
-      ? prevData?.product_color[1]?.medium_size_quantity
-      : 0,
-    medium_size_price: prevData
-      ? prevData?.product_color[1]?.medium_size_price
-      : 0,
-    large_size_quantity: prevData
-      ? prevData?.product_color[1]?.large_size_quantity
-      : 0,
-    large_size_price: prevData
-      ? prevData?.product_color[1]?.large_size_price
-      : 0,
-    extra_large_size_quantity: prevData
-      ? prevData?.product_color[1]?.extra_large_size_quantity
-      : 0,
-    extra_large_size_price: prevData
-      ? prevData?.product_color[1]?.extra_large_size_price
-      : 0,
-  });
+
+  const addColor = () => {
+    setProductColors([
+      ...productColors,
+      {
+        color: '',
+        sizes: sizes.reduce((acc, size) => {
+          acc[`${size.name}_size_quantity`] = 0;
+          acc[`${size.name}_size_price`] = 0;
+          return acc;
+        }, {}),
+      },
+    ]);
+  };
+
+  const removeColor = (index) => {
+    const updatedColors = [...productColors];
+    updatedColors.splice(index, 1);
+    setProductColors(updatedColors);
+  };
+
+  const sizes = [
+    { name: 'small', label: 'S' },
+    { name: 'medium', label: 'M' },
+    { name: 'large', label: 'L' },
+    { name: 'extra_large', label: 'XL' },
+  ];
 
   useEffect(() => {
-    if (prevData && prevData?.product?.is_main_product === 1)
-    {
-      console.log('main product h');
-      setIsMainProduct(true);
+    if (prevData && prevData?.product?.is_stiched == 1) {
+      setShowSize(false);
+      setDisplayVariants(true);
     }
-    else setIsMainProduct(false);
   }, []);
 
   useEffect(() => {
@@ -139,10 +119,6 @@ export default function ProductAddEdit({ isEdit, isView }) {
         setCategories(res.data.result);
       }
     });
-
-    if (isEdit || isView) {
-      setShowImage(true);
-    }
   }, []);
 
   // fetching initial data
@@ -154,8 +130,9 @@ export default function ProductAddEdit({ isEdit, isView }) {
   }, []);
 
   const handleChange = (e) => {
+    setErr(false);
+
     const { name, value } = e.target;
-    
     if (name === 'is_stiched') {
       const isStichedValue = parseInt(value);
       const newSize = isStichedValue === 1 ? 'wide-range' : '';
@@ -168,8 +145,6 @@ export default function ProductAddEdit({ isEdit, isView }) {
       if (isStichedValue == 1) {
         setShowSize(false);
         setDisplayVariants(true);
-        setProductColor1('');
-        setProductColor2('');
       } else {
         setDisplayVariants(false);
         setShowSize(true);
@@ -179,37 +154,56 @@ export default function ProductAddEdit({ isEdit, isView }) {
     }
   };
 
-  const handleChange1 = (e) => {
-    const { name, value } = e.target;
-    setProductColor1({ ...productColor1, [name]: value });
-  };
-  const handleChange2 = (e) => {
-    const { name, value } = e.target;
-    setProductColor2({ ...productColor2, [name]: value });
-  };
-  
   const handleCheckboxChange = () => {
-    setIsMainProduct(!isMainProduct);
+    setNewData({ ...newData, is_main_product: !newData.is_main_product });
+  };
+
+  const selectImage = (index) => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.onchange = (e) => handleImageChange(e, index);
+    fileInput.click();
+  };
+
+  const handleImageChange = (e, index) => {
+    setErr(false);
+
+    const file = e.target.files[0];
+    if (file) {
+      const updatedImages = [...selectedImages];
+      updatedImages[index] = file;
+      setSelectedImages(updatedImages);
+
+      if (prevImageUrls[index] && prevImageUrls[index].id) {
+        setChangedImageIds((prevIds) => [...prevIds, prevImageUrls[index].id]);
+      }
+    }
   };
 
   const saveOnclick = () => {
+    // console.log('saveonClick');
     if (!newData.name) setNameErr(true);
     else if (!newData.price) setPriceErr(true);
-    else if (!mainImage) {
+    else if (newData?.product?.is_stiched ===0 && !newData.available_stock) setStockErr(true);
+    
+    else if (!newData.category_id) {
       setErr(true);
-      setErrMsg('Must select first(main) image');
-    }else if (!newData.category_id) {
-      setErr(true);
-      setErrMsg('Select category');
-    } else {
+      setErrMsg('MUst Select category');
+    } 
+    // else if (!selectedImages[0] && !prevImageUrls[0]) {
+    //   setErr(true);
+    //   setErrMsg('First Image is mendatory');
+    // }
+    
+    else {
       setErr(false);
       setIsLoading(true);
       postProduct({
         ...newData,
-        isMainProduct,
-        images: { mainSelected, img2Selected, img3Selected },
-        productColor1,
-        productColor2,
+        changedImageIds,
+        selectedImages,
+        productColors,
       })
         .then(({ data }) => {
           setIsLoading(false);
@@ -237,27 +231,77 @@ export default function ProductAddEdit({ isEdit, isView }) {
   };
 
   const handleEdit = () => {
-    // navigate('/dashboard/product/edit', {
-    //   state: { editData: prevData },
-    // });
+    navigate('/dashboard/product/edit', {
+      state: { editData: prevData },
+    });
   };
 
-  const handleFileChange = (event, setFile, selectedFile) => {
-    const file = event.target.files[0];
-    console.log('file', file);
-    if (file) {
-      selectedFile(file);
-      setFile(URL.createObjectURL(file));
+  const handleDeleteImage = (index) => {
+    if (prevImageUrls[index] && prevImageUrls[index].id) {
+      console.log('image exist');
+      setChangedImageIds((prevIds) => [...prevIds, prevImageUrls[index].id]);
     }
+    const updatedImages = [...selectedImages];
+    updatedImages[index] = null;
+    setSelectedImages(updatedImages);
+
+    const updatedUrls = [...prevImageUrls];
+    updatedUrls[index] = null;
+    setPrevImageUrls(updatedUrls);
   };
 
+  // console.log('changedImageIds', changedImageIds);
+  // console.log('selectedImages', selectedImages);
+  // console.log('prevImageUrls', prevImageUrls);
+
+  useEffect(() => {
+    if (prevData && prevData.product_color && prevData.product.is_stiched === 1) {
+      setProductColors(
+        prevData.product_color.map((color) => ({
+          color: color.color,
+          sizes: {
+            small_size_quantity: color.small_size_quantity || 0,
+            small_size_price: color.small_size_price || 0,
+            medium_size_quantity: color.medium_size_quantity || 0,
+            medium_size_price: color.medium_size_price || 0,
+            large_size_quantity: color.large_size_quantity || 0,
+            large_size_price: color.large_size_price || 0,
+            extra_large_size_quantity: color.extra_large_size_quantity || 0,
+            extra_large_size_price: color.extra_large_size_price || 0,
+          },
+        }))
+      );
+    }
+  }, [prevData]);
+
+useEffect(() => {
+  if (prevData && prevData.image_product) {
+    
+    const images = prevData.image_product.map((image) => ({
+      id: image?.id,
+      imageUrl: image?.image_url,
+      isMain: image?.is_main
+    }));
+    
+    //find index of main image
+    var mainImage = images.find(image => image.isMain === 1);
+    mainImage = mainImage ? mainImage : null;
+    const remainingImages = images.filter(image => image.id !== mainImage?.id);
+    const newArray = [mainImage, ...remainingImages];
+    setPrevImageUrls(newArray);
+  }
+}, [prevData]);
+
+  
+  // console.log("prevImages", prevImageUrls);
+  
   return (
     <>
       <div className='mainDashView'>
         <div>
           <Header svg={icon} DashboardNavText={'Product'} />
         </div>
-        <div className='dashPanel' style={{ position: 'relative' }}>
+        <div className='productDashPanel' style={{ position: 'relative' }}>
           <>
             <div className=''>
               {err ? (
@@ -294,30 +338,41 @@ export default function ProductAddEdit({ isEdit, isView }) {
                     className='editPage_btn'
                     style={{ color: PRIMARY }}
                     onClick={() => navigate('/dashboard/products')}
-                    hidden={isView}
                   >
-                    Discard
+                    {isView ? 'Back' : 'Cancel'}
                   </button>
                   <button
                     className='editPage_btn'
-                    style={{ backgroundColor: PRIMARY, color: 'white' }}
+                    style={{
+                      backgroundColor: PRIMARY,
+                      color: 'white',
+                      marginLeft: '0.5rem',
+                    }}
                     onClick={saveOnclick}
                     hidden={isView}
-                    disabled={isLoading}
+                    // disabled={isLoading}
                   >
-                    {isLoading ? 'Saving...' : (isEdit ? 'Update' : 'Add Product')}
+                    {isLoading
+                      ? 'Saving...'
+                      : isEdit
+                      ? 'Update'
+                      : 'Add Product'}
                   </button>
-                  {/* {isView && (
+                  {isView && (
                     <div className='ev-btnAdd ev-btn'>
                       <button
                         className='editPage_btn'
-                        style={{ backgroundColor: PRIMARY, color: 'white' }}
+                        style={{
+                          backgroundColor: PRIMARY,
+                          color: 'white',
+                          marginLeft: '0.5rem',
+                        }}
                         onClick={handleEdit}
                       >
                         Edit
                       </button>
                     </div>
-                  )} */}
+                  )}
                 </div>
               </div>
 
@@ -355,6 +410,26 @@ export default function ProductAddEdit({ isEdit, isView }) {
                       </div>
                     </div>
                     <div className='ae-formFields'>
+                      
+                      <div className='ae-selectField'>
+                        <p className='if-txt'>Type</p>
+                        <select
+                          name={'is_stiched'}
+                          onChange={(e) => {
+                            handleChange(e);
+                          }}
+                          disabled={isView}
+                          className='type-select'
+                          value={newData?.is_stiched}
+                        >
+                          <option value='' disabled>
+                            select Type
+                          </option>
+
+                          <option value={1}>Stitched</option>
+                          <option value={0}>Un-Stitched</option>
+                        </select>
+                      </div>
                       <div className='ae-selectField'>
                         <p className='if-txt'>Size</p>
                         <select
@@ -375,26 +450,6 @@ export default function ProductAddEdit({ isEdit, isView }) {
                           <option value='3-piece'>3-piece</option>
                         </select>
                       </div>
-
-                      <div className='ae-selectField'>
-                        <p className='if-txt'>Type</p>
-                        <select
-                          name={'is_stiched'}
-                          onChange={(e) => {
-                            handleChange(e);
-                          }}
-                          disabled={isView}
-                          className='type-select'
-                          value={newData?.is_stiched}
-                        >
-                          <option value='' disabled>
-                            select Type
-                          </option>
-                          
-                          <option value={1}>Stitched</option>
-                          <option value={0}>Un-Stitched</option>
-                        </select>
-                      </div>
                     </div>
 
                     {/* <h3>Pricing</h3> */}
@@ -412,7 +467,7 @@ export default function ProductAddEdit({ isEdit, isView }) {
                           }}
                           placeholder={'Base Price'}
                           radius='7px'
-                          width='19vw'
+                          width='12vw'
                           disable={isView}
                         />
                       </div>
@@ -426,288 +481,51 @@ export default function ProductAddEdit({ isEdit, isView }) {
                           }}
                           placeholder={'Discout Percentage(%)'}
                           radius='7px'
-                          width='19vw'
+                          width='12vw'
                           disable={isView}
                         />
                       </div>
-                      <div 
-                      style={{
-                        padding:"1rem 0",
-                        display:"flex",
-                        alignItems:'center'
-                      }}>
+                      <div className='ae-inputField'>
+                        <InputField
+                          type='number'
+                          name={'available_stock'}
+                          value={newData?.available_stock}
+                          isErr={stockErr}
+                          errorMsg={'Please fill in the field'}
+                          onChange={(e) => {
+                            setStockErr(false);
+                            handleChange(e);
+                          }}
+                          placeholder={'Available Stock'}
+                          radius='7px'
+                          width='12vw'
+                          disable={isView}
+                        />
+                      </div>
+
+                      <div
+                        style={{
+                          padding: '1rem 0',
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                      >
                         <input
                           type='checkbox'
-                          value={isMainProduct}
-                          onChange={
-                            handleCheckboxChange
-                          }
+                          checked={newData?.is_main_product}
+                          onChange={handleCheckboxChange}
                           disabled={isView}
-                          />
-                          <p style={{
-                            padding:"1rem 0.5rem"
-                          }}>Make this product main product</p>
+                        />
+                        <p
+                          style={{
+                            padding: '1rem 0.5rem',
+                          }}
+                        >
+                          Make this product main product
+                        </p>
                       </div>
                     </div>
                   </div>
-
-                  {displayVariants && (
-                    <div
-                      style={{
-                        backgroundColor: '#f6f6f6',
-                        padding: '1rem 0rem',
-                        padding: '1rem',
-                      }}
-                    >
-                      <h3>Variants</h3>
-
-                      <table>
-                        <thead>
-                          <th rowSpan='2'>Color</th>
-                          <th colSpan='4'>Quantity</th>
-                          <th colSpan='4'>Price</th>
-                        </thead>
-
-                        <tr>
-                          <th>S</th>
-                          <th>M</th>
-                          <th>L</th>
-                          <th>XL</th>
-                          <th>S</th>
-                          <th>M</th>
-                          <th>L</th>
-                          <th>XL</th>
-                        </tr>
-
-                        <tr>
-                          <td>
-                            <input
-                              type='text'
-                              name={'color'}
-                              value={productColor1?.color}
-                              onChange={(e) => {
-                                handleChange1(e);
-                              }}
-                              placeholder={'Color'}
-                              disabled={isView}
-                            />
-                          </td>
-
-                          <td>
-                            <input
-                              type='tel'
-                              name='small_size_quantity'
-                              value={productColor1?.small_size_quantity}
-                              onChange={(e) => {
-                                handleChange1(e);
-                              }}
-                              size={5}
-                              disabled={isView}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type='tel'
-                              name='medium_size_quantity'
-                              value={productColor1?.medium_size_quantity}
-                              onChange={(e) => {
-                                handleChange1(e);
-                              }}
-                              size={5}
-                              disabled={isView}
-                            />
-                          </td>
-
-                          <td>
-                            <input
-                              type='tel'
-                              name='large_size_quantity'
-                              value={productColor1?.large_size_quantity}
-                              onChange={(e) => {
-                                handleChange1(e);
-                              }}
-                              size={5}
-                              disabled={isView}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type='tel'
-                              name='extra_large_size_quantity'
-                              value={productColor1?.extra_large_size_quantity}
-                              onChange={(e) => {
-                                handleChange1(e);
-                              }}
-                              size={5}
-                              disabled={isView}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type='tel'
-                              name='small_size_price'
-                              value={productColor1?.small_size_price}
-                              onChange={(e) => {
-                                handleChange1(e);
-                              }}
-                              size={5}
-                              disabled={isView}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type='tel'
-                              name='medium_size_price'
-                              value={productColor1?.medium_size_price}
-                              onChange={(e) => {
-                                handleChange1(e);
-                              }}
-                              size={5}
-                              disabled={isView}
-                            />
-                          </td>
-
-                          <td>
-                            <input
-                              type='tel'
-                              name='large_size_price'
-                              value={productColor1?.large_size_price}
-                              onChange={(e) => {
-                                handleChange1(e);
-                              }}
-                              size={5}
-                              disabled={isView}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type='tel'
-                              name='extra_large_size_price'
-                              value={productColor1?.extra_large_size_price}
-                              size={5}
-                              onChange={(e) => {
-                                handleChange1(e);
-                              }}
-                              disabled={isView}
-                            />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <input
-                              type='text'
-                              value={productColor2?.color}
-                              name={'color'}
-                              onChange={(e) => {
-                                handleChange2(e);
-                              }}
-                              placeholder={'Color'}
-                              disabled={isView}
-                            />
-                          </td>
-
-                          <td>
-                            <input
-                              type='tel'
-                              value={productColor2?.small_size_quantity}
-                              name={'small_size_quantity'}
-                              onChange={(e) => {
-                                handleChange2(e);
-                              }}
-                              size={5}
-                              disabled={isView}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type='tel'
-                              value={productColor2?.medium_size_quantity}
-                              name={'medium_size_quantity'}
-                              onChange={(e) => {
-                                handleChange2(e);
-                              }}
-                              size={5}
-                              disabled={isView}
-                            />
-                          </td>
-
-                          <td>
-                            <input
-                              type='tel'
-                              value={productColor2?.large_size_quantity}
-                              name={'large_size_quantity'}
-                              onChange={(e) => {
-                                handleChange2(e);
-                              }}
-                              size={5}
-                              disabled={isView}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type='tel'
-                              value={productColor2?.extra_large_size_quantity}
-                              name={'extra_large_size_quantity'}
-                              onChange={(e) => {
-                                handleChange2(e);
-                              }}
-                              size={5}
-                              disabled={isView}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type='tel'
-                              value={productColor2?.small_size_price}
-                              name={'small_size_price'}
-                              onChange={(e) => {
-                                handleChange2(e);
-                              }}
-                              size={5}
-                              disabled={isView}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type='tel'
-                              value={productColor2?.medium_size_price}
-                              name={'medium_size_price'}
-                              onChange={(e) => {
-                                handleChange2(e);
-                              }}
-                              size={5}
-                              disabled={isView}
-                            />
-                          </td>
-
-                          <td>
-                            <input
-                              type='tel'
-                              value={productColor2?.large_size_price}
-                              name={'large_size_price'}
-                              onChange={(e) => {
-                                handleChange2(e);
-                              }}
-                              size={5}
-                              disabled={isView}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type='tel'
-                              value={productColor2?.extra_large_size_price}
-                              name={'extra_large_size_price'}
-                              onChange={(e) => {
-                                handleChange2(e);
-                              }}
-                              size={5}
-                              disabled={isView}
-                            />
-                          </td>
-                        </tr>
-                      </table>
-                    </div>
-                  )}
                 </div>
                 {/* right side */}
                 <div
@@ -724,105 +542,87 @@ export default function ProductAddEdit({ isEdit, isView }) {
                     }}
                   >
                     <h3>Product Images</h3>
+                    <p>Click to Choose or Change Image/s</p>
 
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-around',
-                        margin: '0.5rem 0rem',
-                        padding: '1rem 0rem',
-                      }}
-                    >
-                      <input
-                        type='file'
-                        accept='image/jpeg, image/png, image/jpg'
-                        hidden
-                        onChange={(e) =>
-                          handleFileChange(e, setMainImage, setMainSelected)
-                        }
-                        ref={fileInputRef1}
-                        disabled={isView}
-                      />
-                      <div
-                        onClick={() => handleImageUploadClick(fileInputRef1)}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          border: '2px dotted grey',
-                          height: '15vh',
-                          width: '7vw',
-                          borderRadius: '5px',
-                          cursor: 'pointer',
-                          backgroundImage: showImage
-                            ? `url(${BASE_URL}${prevData?.image_product[0]?.image_url})`
-                            : `url(${mainImage})`,
-                          backgroundPosition: 'center center',
-                          backgroundSize: 'cover',
-                        }}
-                      >
-                        {!mainImage && !prevData && 'Select Image to upload'}
-                      </div>
-                      <input
-                        type='file'
-                        accept='image/jpeg, image/png, image/jpg'
-                        hidden
-                        onChange={(e) =>
-                          handleFileChange(e, setImage2, setImg2Selected)
-                        }
-                        ref={fileInputRef2}
-                        disabled={isView}
-                      />
-                      <div
-                        onClick={() => handleImageUploadClick(fileInputRef2)}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          border: '2px dotted grey',
-                          height: '15vh',
-                          width: '7vw',
-                          borderRadius: '5px',
-                          cursor: 'pointer',
-                          backgroundImage: showImage
-                            ? `url(${BASE_URL}${prevData?.image_product[1]?.image_url})`
-                            : `url(${image2})`,
-                          backgroundPosition: 'center center',
-                          backgroundSize: 'cover',
-                        }}
-                      >
-                        {!image2 && !prevData && 'Select Image to upload'}
-                      </div>
-                      <input
-                        type='file'
-                        accept='image/jpeg, image/png, image/jpg'
-                        hidden
-                        onChange={(e) =>
-                          handleFileChange(e, setImage3, setImg3Selected)
-                        }
-                        ref={fileInputRef3}
-                        disabled={isView}
-                      />
-                      <div
-                        onClick={() => handleImageUploadClick(fileInputRef3)}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          border: '2px dotted grey',
-                          height: '15vh',
-                          width: '7vw',
-                          borderRadius: '5px',
-                          cursor: 'pointer',
-                          backgroundImage: showImage
-                            ? `url(${BASE_URL}${prevData?.image_product[2]?.image_url})`
-                            : `url(${image3})`,
-                          backgroundPosition: 'center center',
-                          backgroundSize: 'cover',
-                        }}
-                      >
-                        {!image3 && !prevData && 'Select Image to upload'}
-                      </div>
+                    <div style={{ display: 'flex' }}>
+                      {selectedImages.map((image, index) => (     //array of 3 images
+                        <div
+                          key={index}
+                          style={{
+                            position: 'relative',
+                            width: '150px',
+                            height: '150px',
+                            border: '2px dotted #ccc',
+                            margin: '10px',
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            cursor: isView ? 'default' : 'pointer',
+                          }}
+                          onClick={
+                            !isView ? () => selectImage(index) : undefined
+                          }
+                        >
+                          {image  || (prevImageUrls[index] && prevImageUrls[index].imageUrl !== null) ? (
+                            <>
+                              <img
+                                style={{
+                                  width: '100%',
+                                  height: '100%',
+                                  borderRadius: '5px',
+                                }}
+                                src={
+                                  image instanceof File
+                                    ? URL.createObjectURL(image)
+                                    : `${BASE_URL}${prevImageUrls[index]?.imageUrl}`
+                                }
+                                alt='no_img'
+                              />
+                              {/* Delete Icon/Button/Text */}
+                              {!isView && (
+                                <div
+                                  style={{
+                                    position: 'absolute',
+                                    top: '5px',
+                                    right: '5px',
+                                    background: 'red',
+                                    color: 'white',
+                                    borderRadius: '50%',
+                                    width: '30px',
+                                    height: '30px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                  }}
+                                  onClick={(e) => {
+                                    e.stopPropagation(); // Prevent onClick on parent div
+                                    handleDeleteImage(index); // Call delete image function
+                                  }}
+                                >
+                                  X
+                                </div>
+                              )}
+                              {/* Caption Overlay */}
+                              <div
+                                style={{
+                                  position: 'absolute',
+                                  bottom: 0,
+                                  left: 0,
+                                  width: '100%',
+                                  background: 'rgba(0, 0, 0, 0.5)',
+                                  color: '#fff',
+                                  padding: '5px',
+                                  borderRadius: '0 0 5px 5px',
+                                }}
+                              >
+                                {index === 0 ? 'Main Image' :  `Image ${index + 1}`}
+                              </div>
+                            </>
+                          ) : (
+                            ''
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
                   <div
@@ -842,7 +642,7 @@ export default function ProductAddEdit({ isEdit, isView }) {
                         }}
                         disabled={isView}
                         className='custom-select'
-                        name={"category_id"}
+                        name={'category_id'}
                         value={newData?.category_id}
                       >
                         <option value='' disabled>
@@ -856,45 +656,121 @@ export default function ProductAddEdit({ isEdit, isView }) {
                       </select>
                     </div>
                   </div>
-                  <div
-                    style={{
-                      backgroundColor: '#f6f6f6',
-                      padding: '1.5rem 2rem 1rem 1.5rem',
-                      borderRadius: '0.5rem',
-                      marginBottom: '1rem',
-                    }}
-                  >
-                    <h3>Inventory</h3>
-                    <div className='ae-formFields'>
-                      <div className='ae-inputField'>
-                        <InputField
-                          type='number'
-                          name={'available_stock'}
-                          value={newData?.available_stock}
-                          onChange={(e) => {
-                            handleChange(e);
-                          }}
-                          placeholder={'Available Stock'}
-                          radius='7px'
-                          width='50px'
-                          disable={isView}
-                        />
-                      </div>
-                      <div className='ae-inputField'>
-                        <InputField
-                          // onChange={(e) => {
-                          //   handleChange(e);
-                          // }}
-                          width='50px'
-                          placeholder={'SKU (optional)'}
-                          radius='7px'
-                          disable={isView}
-                        />
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
+              {displayVariants && (
+                <div
+                  style={{
+                    backgroundColor: '#f6f6f6',
+                    padding: '1rem',
+                    borderRadius: '0.5rem',
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginBottom: '0.5rem',
+                    }}
+                  >
+                    <h3>Variants</h3>
+                    <button
+                      onClick={addColor}
+                      className='editPage_btn'
+                      style={{ backgroundColor: PRIMARY, color: 'white' }}
+                      disabled={isView}
+                    >
+                      Add New Variant
+                    </button>
+                  </div>
+                  <div style={{ maxHeight: '12vh', overflowY: 'scroll' }}>
+                    {productColors.length === 0 && (
+                      <div
+                        style={{
+                          height: '5vh',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        Not Variants yet.. add new{' '}
+                      </div>
+                    )}
+                    {productColors.length > 0 && (
+                      <table>
+                        <thead>
+                          <tr>
+                            <th rowSpan='2' align='start'>
+                              Color
+                            </th>
+                            {sizes.map((size) => (
+                              <th key={size.name} align='start'>
+                                {size.label} {'( Qty, Price )'}
+                              </th>
+                            ))}
+                            <th rowSpan='2' align='start'>
+                              Action
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {productColors.map((color, index) => (
+                            <tr key={index}>
+                              <td>
+                                <input
+                                  type='text'
+                                  name='color'
+                                  value={color.color}
+                                  onChange={(e) => handlenewChange(index, e)}
+                                  placeholder='Color'
+                                  disabled={isView}
+                                />
+                              </td>
+                              {sizes.map((size) => (
+                                <td
+                                  key={`${color.color}-${size.name}`}
+                                  align='start'
+                                >
+                                  <input
+                                    type='tel'
+                                    name={`${size.name}_size_quantity`}
+                                    value={
+                                      color.sizes[`${size.name}_size_quantity`]
+                                    }
+                                    onChange={(e) => handlenewChange(index, e)}
+                                    size={5}
+                                    disabled={isView}
+                                  />
+                                  <input
+                                    type='tel'
+                                    name={`${size.name}_size_price`}
+                                    value={
+                                      color.sizes[`${size.name}_size_price`]
+                                    }
+                                    onChange={(e) => handlenewChange(index, e)}
+                                    size={5}
+                                    disabled={isView}
+                                  />
+                                </td>
+                              ))}
+                              <td>
+                                <button
+                                  onClick={() => removeColor(index)}
+                                  className='editPage_btn'
+                                  disabled={isView}
+                                >
+                                  Remove
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </>
         </div>

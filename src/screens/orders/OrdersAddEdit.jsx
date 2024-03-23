@@ -36,210 +36,137 @@ export default function OrdersAddEdit() {
           <>
             <div className='ar-dashpanel'>
               <div className='payment_main_container'>
-                <h3>Order Details</h3>
+                <h3>Order Details :</h3>
                 <div className='booking_details'>
                   <div className='booking_data'>
                     <span className='booking_data_question'>
-                      No. of storey:
+                      No. of Products:
                     </span>
                     <span className='booking_data_selection'>
-                      {data.storey_label}
+                      ({data?.checkout_checkout_product?.length}) products
                     </span>
                   </div>
                   <div className='booking_data'>
                     <span className='booking_data_question'>
-                      No. of bedroom:
+                      Payment Method:
                     </span>
                     <span className='booking_data_selection'>
-                      {data.bedroom_label}
+                      {data?.payment_method == 1
+                        ? 'Credit Card'
+                        : 'Cash On Delivery'}
                     </span>
                   </div>
                   <div className='booking_data'>
-                    <span className='booking_data_question'>
-                      No. of bathroom:
-                    </span>
+                    <span className='booking_data_question'>Order Amount:</span>
                     <span className='booking_data_selection'>
-                      {data.bathroom_label}
+                      {data?.total_amount || 0} Rs
                     </span>
                   </div>
                   <div className='booking_data'>
-                    <span className='booking_data_question'>
-                      Date of booking:
-                    </span>
+                    <span className='booking_data_question'>Order Date:</span>
                     <span className='booking_data_selection'>
-                      {data?.date_of_booking
-                        ? moment(data.date_of_booking).format('YYYY-MM-DD')
+                      {data?.createdAt
+                        ? moment(data.createdAt).format('YYYY-MM-DD')
                         : 'Not selected'}
-                    </span>
-                  </div>
-                  <div className='booking_data'>
-                    <span className='booking_data_question'>
-                      Time of cleaner arrival:
-                    </span>
-                    <span className='booking_data_selection'>
-                      {data?.time_of_booking_label}
-                    </span>
-                  </div>
-                  <div className='booking_data'>
-                    <span className='booking_data_question'>
-                      Will you be home?{' '}
-                    </span>
-                    <span className='booking_data_selection'>
-                      {data.is_home === Enums.is_home.yes
-                        ? " Yes, I'll be home"
-                        : ' No, I will leave key out'}
-                    </span>
-                  </div>
-                  <div className='booking_data'>
-                    <span className='booking_data_question'>
-                      Property type:
-                    </span>
-                    <span className='booking_data_selection'>
-                      {data.property_type === Enums.property_type.un_furnished
-                        ? ' Un-Furnished'
-                        : ' Furnished'}
-                    </span>
-                  </div>
-                  <div className='booking_data'>
-                    <span className='booking_data_question'>
-                      Power availability:
-                    </span>
-                    <span className='booking_data_selection'>
-                      {data.is_power_available === Enums.is_power_available.yes
-                        ? ' Yes, Power is available'
-                        : ' No, Power is not available'}
                     </span>
                   </div>
                 </div>
 
                 <div className='extras_booking_details_main'>
-                  <h4>Extras</h4>
+                  <h4>Customer Info :</h4>
                   <div className='booking_details'>
-                    {data?.balcony_label ? (
-                      <div className='booking_data'>
-                        <span className='booking_data_question'>
-                          Additional Balcony to clean:
-                        </span>
-                        <span className='booking_data_selection'>
-                          {data?.balcony_label}
-                        </span>
-                      </div>
-                    ) : null}
-
-                    {data?.blind_label ? (
-                      <div className='booking_data'>
-                        <span className='booking_data_question'>
-                          No. of blinds to clean:
-                        </span>
-                        <span className='booking_data_selection'>
-                          {data?.blind_label}
-                        </span>
-                      </div>
-                    ) : null}
-
-                    {data?.carpet ? (
-                      <div className='booking_data'>
-                        <span className='booking_data_question'>
-                          No. of rooms for carpet Steam Clean:
-                        </span>
-                        <span className='booking_data_selection'>
-                          {data?.carpet?.label}
-                        </span>
-                      </div>
-                    ) : null}
-
-                    {data?.wall_label ? (
-                      <div className='booking_data'>
-                        <span className='booking_data_question'>
-                          No. of rooms for wall wash:
-                        </span>
-                        <span className='booking_data_selection'>
-                          {data?.wall_label}
-                        </span>
-                      </div>
-                    ) : null}
-
-                    {data?.windows_label ? (
-                      <div className='booking_data'>
-                        <span className='booking_data_question'>
-                          No. of Outside windows to clean:
-                        </span>
-                        <span className='booking_data_selection'>
-                          {data?.windows_label}
-                        </span>
-                      </div>
-                    ) : null}
-
-                    {data?.misc_label ? (
-                      <div className='booking_data'>
-                        <span className='booking_data_question'>
-                          miscellaneous service (by price):
-                        </span>
-                        <span className='booking_data_selection'>
-                          {data?.misc_label}
-                        </span>
-                      </div>
-                    ) : null}
-                    {/* singles slections */}
-
                     <div className='booking_data'>
-                      <span className='booking_data_question'>
-                        Garage Cleaning:
-                      </span>
+                      <span className='booking_data_question'>Name:</span>
                       <span className='booking_data_selection'>
-                        {data?.garage === 1 ? ' Included' : ' Not included'}
+                        {data?.first_name} {data?.last_name}
                       </span>
                     </div>
                     <div className='booking_data'>
                       <span className='booking_data_question'>
-                        Fridge cleaning:
+                        Contact Number#
                       </span>
                       <span className='booking_data_selection'>
-                        {data?.fridge === 1 ? ' Included' : ' Not included'}
+                        {data?.contact_number}
                       </span>
                     </div>
                     <div className='booking_data'>
                       <span className='booking_data_question'>
-                        Double Fridge cleaning:
+                        Address Line 01:
                       </span>
                       <span className='booking_data_selection'>
-                        {data?.double_fridge === 1
-                          ? ' Included'
-                          : ' Not included'}
+                        {data?.address_line_01}
                       </span>
                     </div>
                     <div className='booking_data'>
                       <span className='booking_data_question'>
-                        Pressure washing:
+                        Address Line 02:
                       </span>
                       <span className='booking_data_selection'>
-                        {data?.pressure_washing === 1
-                          ? ' Included'
-                          : ' Not included'}
+                        {data?.address_line_02}
                       </span>
                     </div>
                     <div className='booking_data'>
-                      <span className='booking_data_question'>Travel Fee:</span>
+                      <span className='booking_data_question'>City:</span>
                       <span className='booking_data_selection'>
-                        {data?.travel_fee === 1 ? ' Included' : ' Not included'}
+                        {data?.city}
                       </span>
                     </div>
                     <div className='booking_data'>
-                      <span className='booking_data_question'>
-                        Living area cleaning:
-                      </span>
+                      <span className='booking_data_question'>State:</span>
                       <span className='booking_data_selection'>
-                        {data?.living_area === 1
-                          ? ' Included'
-                          : ' Not included'}
+                        {data?.state}
                       </span>
                     </div>
                     <div className='booking_data'>
-                      <span className='booking_data_question'>Urgent Job:</span>
+                      <span className='booking_data_question'>Zip Code:</span>
                       <span className='booking_data_selection'>
-                        {data?.urgent_job === 1 ? ' Included' : ' Not included'}
+                        {data?.zip_code}
                       </span>
                     </div>
+                  </div>
+                </div>
+              </div>
+              <div className='payment_main_container'>
+                <div className='extras_booking_details_main'>
+                  <h4>Products :</h4>
+                  <div className='booking_details'>
+                    {data?.checkout_checkout_product && (
+                      <div
+                        style={{
+                          maxHeight: '50vh',
+                          overflowY: 'scroll',
+                          lineHeight: '1.5rem',
+                        }}
+                      >
+                        {data?.checkout_checkout_product?.map(
+                          (product, index) => (
+                            <div
+                              key={index}
+                              style={{
+                                padding: '0.5rem 0rem',
+                                margin: '1rem 0rem',
+                                borderBottom: '1px solid lightgrey',
+                              }}
+                            >
+                              <p>{product?.checkout_product_product?.name || 'product_name'}</p>
+                              <p>
+                                {product.color}{' '}
+                                {product.variant}
+                              </p>
+                              <p>
+                                <b>Price: </b>
+                                {product.price} Rs
+                              </p>
+                              <p>
+                                <b>Qty: </b>
+                                {product.quantity}
+                              </p>
+                              <p></p>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

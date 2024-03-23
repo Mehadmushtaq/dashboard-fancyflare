@@ -12,6 +12,8 @@ import { ErrorCode, ErrorMessages } from '../../constants/ErrorCodes';
 import { PRIMARY } from '../../constants/Colors';
 import ModalComp from '../../components/modal/ModalComp';
 import { deleteOrder, getAllOrders } from '../../api/order';
+import { GrView } from 'react-icons/gr';
+
 
 export default function Orders() {
   const icon = () => {
@@ -61,6 +63,7 @@ export default function Orders() {
         if (data.error_code === ErrorCode.success) {
           setData(data.result);
           setPage(pageNumber);
+          setTotalRecords(data?.total_records);
         } else if (data.error_code === ErrorCode.not_exist) {
           setData([]);
           setErrorMsg('No data found');
@@ -171,7 +174,7 @@ export default function Orders() {
                       activePage={page}
                       itemsCountPerPage={limit}
                       totalItemsCount={totalRecords}
-                      pageRangeDisplayed={3}
+                      pageRangeDisplayed={5}
                       onChange={(pageNumber) => {
                         handlePageChange(pageNumber);
                       }}
@@ -277,9 +280,9 @@ const Rows = ({ data, page, setIsDeleted }) => {
               minWidth: '60px',
             }}
           >
-            {/* <button onClick={() => {}} className='Actionbtn editBtn'>
+            <button onClick={viewData} className='Actionbtn editBtn'>
               <GrView />
-            </button> */}
+            </button>
             <button onClick={deleteOnclick} className='Actionbtn delBtn'>
               <RiDeleteBin6Line />
             </button>
